@@ -1,156 +1,157 @@
 package Solution.UI;
 
 import Solution.Logic.AuthManager;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Registration panel styled to resemble classic macOS Aqua appearance
+ * Minimalist registration screen
+ * Same visual language as LoginPanel
  */
 public class RegistrationPanel extends JPanel
 {
-    private final JTextField usernameField;
-    private final JPasswordField passwordField;
-    private final JTextField firstNameField;
-    private final JTextField lastNameField;
+    private final AuthFrame      parent;
+    private final AuthManager    auth;
+    private final JTextField     username;
+    private final JPasswordField password;
+    private final JTextField     firstName;
+    private final JTextField     lastName;
 
-    public RegistrationPanel(AuthFrame frame, AuthManager authManager)
+    public RegistrationPanel(AuthFrame parent, AuthManager auth)
     {
-        setLayout(new BorderLayout(12, 12));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
-        setBackground(new Color(236, 236, 236));
+        this.parent = parent;
+        this.auth   = auth;
 
-        JPanel content = new JPanel(new GridBagLayout());
-        content.setOpaque(false);
-        GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 0, 8, 0);
-        gbc.anchor = GridBagConstraints.WEST;
+        setLayout(new BorderLayout());
+        setBorder(BorderFactory.createEmptyBorder(80, 60, 80, 60));
+        setBackground(new Color(250, 250, 252));
 
-        // Title
+        Box box = Box.createVerticalBox();
+        box.setAlignmentX(CENTER_ALIGNMENT);
+
         JLabel title = new JLabel("Create Account", SwingConstants.CENTER);
-        title.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-        title.setForeground(new Color(0, 0, 0, 220));
+        title.setFont(new Font("SF Pro Display", Font.PLAIN, 26));
+        fallbackFont(title, "Helvetica Neue", Font.PLAIN, 26);
+        title.setForeground(new Color(28, 28, 30));
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 60, 0));
+        box.add(title);
+        box.add(Box.createVerticalStrut(16));
 
-        gbc.gridx = 0;
-        gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        content.add(title, gbc);
+        username   = createField("Username");
+        box.add(username);   box.add(Box.createVerticalStrut(28));
 
-        // Username
-        gbc.gridy++;
-        gbc.gridwidth = 1;
-        content.add(new JLabel("Username:"), gbc);
+        password   = createPasswordField("Password");
+        box.add(password);   box.add(Box.createVerticalStrut(28));
 
-        gbc.gridx = 1;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        usernameField = new JTextField(18);
-        styleTextField(usernameField);
-        content.add(usernameField, gbc);
+        firstName  = createField("First Name");
+        box.add(firstName);  box.add(Box.createVerticalStrut(28));
 
-        // Password
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weightx = 0;
-        content.add(new JLabel("Password:"), gbc);
+        lastName   = createField("Last Name");
+        box.add(lastName);   box.add(Box.createVerticalStrut(48));
 
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        passwordField = new JPasswordField(18);
-        styleTextField(passwordField);
-        content.add(passwordField, gbc);
+        JPanel btns = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 0));
+        btns.setOpaque(false);
 
-        // First Name
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weightx = 0;
-        content.add(new JLabel("First Name:"), gbc);
+        JButton create = createMacButton("Create Account");
+        create.addActionListener(e -> tryRegister());
+        btns.add(create);
 
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        firstNameField = new JTextField(18);
-        styleTextField(firstNameField);
-        content.add(firstNameField, gbc);
+        JButton cancel = createMacButton("Cancel");
+        cancel.addActionListener(e -> parent.showLoginPanel());
+        btns.add(cancel);
 
-        // Last Name
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weightx = 0;
-        content.add(new JLabel("Last Name:"), gbc);
+        box.add(btns);
 
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        lastNameField = new JTextField(18);
-        styleTextField(lastNameField);
-        content.add(lastNameField, gbc);
+        JPanel center = new JPanel(new GridBagLayout());
+        center.setOpaque(false);
+        center.add(box);
 
-        // Buttons
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.NONE;
-
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 0));
-        buttonPanel.setOpaque(false);
-
-        JButton registerButton = new JButton("Create Account");
-        styleButton(registerButton);
-        registerButton.addActionListener(e -> attemptRegistration(frame, authManager));
-        buttonPanel.add(registerButton);
-
-        JButton cancelButton = new JButton("Cancel");
-        styleButton(cancelButton);
-        cancelButton.addActionListener(e -> frame.showLoginPanel());
-        buttonPanel.add(cancelButton);
-
-        content.add(buttonPanel, gbc);
-
-        add(content, BorderLayout.CENTER);
+        add(center, BorderLayout.CENTER);
     }
 
-    private void styleTextField(JTextField field)
+    private JTextField createField(String hint)
     {
-        field.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(160, 160, 160)),
-                BorderFactory.createEmptyBorder(6, 8, 6, 8)));
-        field.setBackground(Color.WHITE);
+        JTextField f = new JTextField(28);
+        styleUnderlineField(f, hint);
+        return f;
     }
 
-    private void styleButton(JButton button)
+    private JPasswordField createPasswordField(String hint)
     {
-        button.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(120, 120, 120)),
-                BorderFactory.createEmptyBorder(6, 16, 6, 16)));
-        button.setBackground(new Color(240, 240, 240));
-        button.setOpaque(true);
+        JPasswordField f = new JPasswordField(28);
+        styleUnderlineField(f, hint);
+        return f;
     }
 
-    private void attemptRegistration(AuthFrame frame, AuthManager authManager)
+    private void styleUnderlineField(JTextField f, String hint)
     {
+        f.setFont(new Font("SF Pro Text", Font.PLAIN, 16));
+        fallbackFont(f, "Helvetica Neue", Font.PLAIN, 16);
+        f.setForeground(new Color(44, 44, 46));
+        f.setCaretColor(new Color(10, 132, 255));
+        f.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(180, 180, 190)));
+        f.setBackground(new Color(250, 250, 252));
+        f.setOpaque(false);
+        f.setToolTipText(hint);
+    }
+
+    // Reuse same button style as LoginPanel
+    private JButton createMacButton(String label)
+    {
+        // (copy from LoginPanel – same implementation)
+        JButton b = new JButton(label);
+        b.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
+        fallbackFont(b, "Helvetica Neue", Font.PLAIN, 15);
+        b.setForeground(new Color(28, 28, 30));
+        b.setFocusPainted(false);
+        b.setBorder(BorderFactory.createEmptyBorder(12, 36, 12, 36));
+        b.setBackground(new Color(240, 240, 245));
+        b.setOpaque(true);
+        b.setBorderPainted(false);
+        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return b;
+    }
+
+    private void fallbackFont(JComponent c, String name, int style, int size)
+    {
+        Font f = c.getFont();
+        if (f.getFamily().equals("Dialog") || f.getFamily().contains("SansSerif"))
+        {
+            c.setFont(new Font(name, style, size));
+        }
+    }
+
+    private void tryRegister()
+    {
+        String u  = username.getText().trim();
+        String p  = new String(password.getPassword()).trim();
+        String fn = firstName.getText().trim();
+        String ln = lastName.getText().trim();
+
+        if (u.isEmpty() || p.isEmpty() || fn.isEmpty() || ln.isEmpty())
+        {
+            JOptionPane.showMessageDialog(this,
+                    "All fields are required.",
+                    "Incomplete Form",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
         try
         {
-            authManager.registerUser(
-                    usernameField.getText().trim(),
-                    new String(passwordField.getPassword()),
-                    firstNameField.getText().trim(),
-                    lastNameField.getText().trim()
-            );
+            auth.registerUser(u, p, fn, ln);
             JOptionPane.showMessageDialog(this,
-                    "Account created successfully.",
+                    "Account created. Please sign in.",
                     "Success",
                     JOptionPane.INFORMATION_MESSAGE);
-            frame.showLoginPanel();
+            parent.showLoginPanel();
         }
         catch (IllegalArgumentException ex)
         {
             JOptionPane.showMessageDialog(this,
                     ex.getMessage(),
-                    "Registration Error",
+                    "Registration Failed",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
