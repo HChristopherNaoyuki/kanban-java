@@ -1,21 +1,18 @@
 package Solution.UI;
 
-import javax.swing.*;
-import java.awt.*;
 import Solution.Logic.AuthManager;
 import Solution.Logic.TaskManager;
+import javax.swing.*;
+import java.awt.*;
 
 /**
- * Main application frame with classic 2000s UI style
+ * Main application frame styled to resemble classic macOS Aqua look (early 2000s)
  */
 public final class AuthFrame extends JFrame
 {
     private final AuthManager authManager;
     private final TaskManager taskManager;
 
-    /**
-     * Constructs the main application frame
-     */
     public AuthFrame()
     {
         authManager = new AuthManager();
@@ -24,45 +21,46 @@ public final class AuthFrame extends JFrame
         showLoginPanel();
     }
 
-    /**
-     * Configures frame properties
-     */
     private void setupFrame()
     {
-        setTitle("Task Manager 2002");
-        setSize(400, 300);
+        setTitle("Task Manager");
+        setSize(420, 340);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
-        getContentPane().setBackground(SystemColor.control);
+
+        // Apple-like window background (very light gray/off-white)
+        getContentPane().setBackground(new Color(236, 236, 236));
+
+        // Try to use a macOS-like font
+        Font defaultFont = new Font("Lucida Grande", Font.PLAIN, 13);
+        if (defaultFont.getFamily().equals("Dialog"))
+        {
+            defaultFont = new Font("Dialog", Font.PLAIN, 13);
+        }
+        setFont(defaultFont);
     }
 
-    /**
-     * Shows login panel
-     */
     public void showLoginPanel()
     {
         getContentPane().removeAll();
         add(new LoginPanel(this, authManager));
         revalidate();
+        repaint();
     }
 
-    /**
-     * Shows registration panel
-     */
     public void showRegistrationPanel()
     {
         getContentPane().removeAll();
         add(new RegistrationPanel(this, authManager));
         revalidate();
+        repaint();
     }
 
-    /**
-     * Shows task management panel with welcome message
-     */
     public void showTaskPanel()
     {
         getContentPane().removeAll();
         add(new TaskPanel(this, taskManager, authManager));
         revalidate();
+        repaint();
     }
 }
