@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application frame with macOS-inspired light appearance
+ * Main application window (JFrame) that controls navigation between panels
  */
 public final class AuthFrame extends JFrame
 {
@@ -16,34 +16,35 @@ public final class AuthFrame extends JFrame
 
     public AuthFrame()
     {
-        authManager = new AuthManager();
-        taskManager = new TaskManager();
+        this.authManager = new AuthManager();
+        this.taskManager = new TaskManager();
 
-        initAppearance();
+        initializeWindow();
         showLoginPanel();
     }
 
-    private void initAppearance()
+    private void initializeWindow()
     {
         setTitle("Task Manager");
-        setSize(520, 620);
-        setMinimumSize(new Dimension(480, 540));
+        setSize(540, 640);
+        setMinimumSize(new Dimension(500, 560));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        // Very light modern / macOS-like background
         getContentPane().setBackground(new Color(250, 250, 252));
 
-        // Prefer SF Pro family → fallbacks
-        Font base = new Font("SF Pro Display", Font.PLAIN, 15);
-        if (base.getFamily().equals("Dialog") || base.getFamily().contains("SansSerif"))
+        // Try to use modern system font stack
+        Font font = new Font("SF Pro Text", Font.PLAIN, 15);
+        if ("Dialog".equals(font.getFamily()) || font.getFamily().contains("SansSerif"))
         {
-            base = new Font("Helvetica Neue", Font.PLAIN, 15);
+            font = new Font("Helvetica Neue", Font.PLAIN, 15);
         }
-        if (base.getFamily().equals("Dialog"))
+        if ("Dialog".equals(font.getFamily()))
         {
-            base = new Font("Arial", Font.PLAIN, 15);
+            font = new Font("Arial", Font.PLAIN, 15);
         }
-        setFont(base);
+        setFont(font);
     }
 
     public void showLoginPanel()

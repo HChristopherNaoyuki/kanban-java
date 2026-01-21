@@ -6,7 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Login panel with labeled fields and flat buttons
+ * Clean, minimalistic login screen with:
+ * • Clear labels above fields
+ * • Underline style input fields
+ * • Flat modern buttons
+ * • Generous whitespace
  */
 public class LoginPanel extends JPanel
 {
@@ -21,69 +25,84 @@ public class LoginPanel extends JPanel
         this.authManager = authManager;
 
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createEmptyBorder(100, 70, 100, 70));
+        setBorder(BorderFactory.createEmptyBorder(120, 80, 120, 80));
         setBackground(new Color(250, 250, 252));
 
-        Box verticalStack = Box.createVerticalBox();
-        verticalStack.setAlignmentX(CENTER_ALIGNMENT);
+        Box vertical = Box.createVerticalBox();
+        vertical.setAlignmentX(CENTER_ALIGNMENT);
 
-        // Title
-        JLabel titleLabel = new JLabel("Sign In", SwingConstants.CENTER);
-        titleLabel.setFont(new Font("SF Pro Display", Font.PLAIN, 28));
-        titleLabel.setForeground(new Color(28, 28, 30));
-        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 70, 0));
-        verticalStack.add(titleLabel);
-        verticalStack.add(Box.createVerticalStrut(20));
+        addTitle(vertical);
+        addSpacing(vertical, 24);
 
-        // Username row
-        verticalStack.add(createLabeledField("USERNAME:", usernameField = new JTextField(26)));
-        verticalStack.add(Box.createVerticalStrut(32));
+        addLabeledField(vertical, "USERNAME:", usernameField = new JTextField(26));
+        addSpacing(vertical, 36);
 
-        // Password row
-        verticalStack.add(createLabeledField("PASSWORD:", passwordField = new JPasswordField(26)));
-        verticalStack.add(Box.createVerticalStrut(60));
+        addLabeledField(vertical, "PASSWORD:", passwordField = new JPasswordField(26));
+        addSpacing(vertical, 64);
 
-        // Buttons
-        JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 48, 0));
-        buttonRow.setOpaque(false);
+        addButtonsRow(vertical);
 
-        JButton signInBtn = createFlatButton("Sign In");
-        signInBtn.addActionListener(e -> attemptLogin());
-        buttonRow.add(signInBtn);
+        JPanel centeringWrapper = new JPanel(new GridBagLayout());
+        centeringWrapper.setOpaque(false);
+        centeringWrapper.add(vertical);
 
-        JButton registerBtn = createFlatButton("Register");
-        registerBtn.addActionListener(e -> frame.showRegistrationPanel());
-        buttonRow.add(registerBtn);
+        add(centeringWrapper, BorderLayout.CENTER);
+    }
 
-        verticalStack.add(buttonRow);
+    private void addTitle(Box container)
+    {
+        JLabel title = new JLabel("Sign In", SwingConstants.CENTER);
+        title.setFont(new Font("SF Pro Display", Font.PLAIN, 30));
+        title.setForeground(new Color(28, 28, 30));
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 60, 0));
+        container.add(title);
+    }
 
-        // Center the stack vertically
-        JPanel centeringPanel = new JPanel(new GridBagLayout());
-        centeringPanel.setOpaque(false);
-        centeringPanel.add(verticalStack);
-
-        add(centeringPanel, BorderLayout.CENTER);
+    private void addLabeledField(Box container, String labelText, JComponent field)
+    {
+        container.add(createLabeledField(labelText, field));
     }
 
     private JPanel createLabeledField(String labelText, JComponent field)
     {
-        JPanel row = new JPanel(new BorderLayout(0, 6));
-        row.setOpaque(false);
+        JPanel panel = new JPanel(new BorderLayout(0, 8));
+        panel.setOpaque(false);
 
         JLabel label = new JLabel(labelText);
         label.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
         label.setForeground(new Color(70, 70, 75));
-        row.add(label, BorderLayout.NORTH);
+        panel.add(label, BorderLayout.NORTH);
 
+        styleInputField(field);
+        panel.add(field, BorderLayout.CENTER);
+
+        return panel;
+    }
+
+    private void styleInputField(JComponent field)
+    {
         field.setFont(new Font("SF Pro Text", Font.PLAIN, 17));
         field.setForeground(new Color(44, 44, 46));
-        field.setCaretColor(new Color(10, 132, 255));
+        field.setCaretColor(new Color(10, 132, 255)); // nice accent color
         field.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(190, 190, 200)));
         field.setBackground(new Color(250, 250, 252));
         field.setOpaque(false);
+    }
 
-        row.add(field, BorderLayout.CENTER);
-        return row;
+    private void addButtonsRow(Box container)
+    {
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
+        buttons.setOpaque(false);
+
+        JButton signIn = createFlatButton("Sign In");
+        signIn.addActionListener(e -> tryLogin());
+        buttons.add(signIn);
+
+        JButton register = createFlatButton("Register");
+        register.addActionListener(e -> frame.showRegistrationPanel());
+        buttons.add(register);
+
+        container.add(buttons);
     }
 
     private JButton createFlatButton(String text)
@@ -92,25 +111,28 @@ public class LoginPanel extends JPanel
         btn.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
         btn.setForeground(new Color(28, 28, 30));
         btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(12, 40, 12, 40));
-        btn.setBackground(new Color(240, 240, 245));
+        btn.setBorder(BorderFactory.createEmptyBorder(14, 48, 14, 48));
+        btn.setBackground(new Color(238, 238, 245));
         btn.setOpaque(true);
         btn.setBorderPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+
         return btn;
     }
 
-    private void attemptLogin()
+    private void addSpacing(Box container, int pixels)
+    {
+        container.add(Box.createVerticalStrut(pixels));
+    }
+
+    private void tryLogin()
     {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
 
-        if (username.isEmpty() || password.isEmpty())
+        if (username.isBlank() || password.isBlank())
         {
-            JOptionPane.showMessageDialog(this,
-                    "Please fill in both fields.",
-                    "Required Fields",
-                    JOptionPane.WARNING_MESSAGE);
+            showWarning("Please fill in both username and password.");
             return;
         }
 
@@ -123,8 +145,16 @@ public class LoginPanel extends JPanel
         {
             JOptionPane.showMessageDialog(this,
                     ex.getMessage(),
-                    "Sign In Error",
+                    "Login Failed",
                     JOptionPane.ERROR_MESSAGE);
         }
+    }
+
+    private void showWarning(String message)
+    {
+        JOptionPane.showMessageDialog(this,
+                message,
+                "Missing Information",
+                JOptionPane.WARNING_MESSAGE);
     }
 }
