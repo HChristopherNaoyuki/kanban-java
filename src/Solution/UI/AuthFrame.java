@@ -7,10 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application frame styled toward modern macOS light mode:
- *   - Very light background
- *   - Generous padding & centering
- *   - Clean system font preference
+ * Main application frame with macOS-inspired light appearance
  */
 public final class AuthFrame extends JFrame
 {
@@ -29,24 +26,24 @@ public final class AuthFrame extends JFrame
     private void initAppearance()
     {
         setTitle("Task Manager");
-        setSize(500, 580);
-        setMinimumSize(new Dimension(460, 520));
+        setSize(520, 620);
+        setMinimumSize(new Dimension(480, 540));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        getContentPane().setBackground(new Color(250, 250, 252));  // macOS light neutral
+        getContentPane().setBackground(new Color(250, 250, 252));
 
-        // Prefer SF Pro → Helvetica Neue → Arial (macOS-like hierarchy)
-        Font baseFont = new Font("SF Pro Text", Font.PLAIN, 14);
-        if (baseFont.getFamily().equals("Dialog") || baseFont.getFamily().contains("SansSerif"))
+        // Prefer SF Pro family → fallbacks
+        Font base = new Font("SF Pro Display", Font.PLAIN, 15);
+        if (base.getFamily().equals("Dialog") || base.getFamily().contains("SansSerif"))
         {
-            baseFont = new Font("Helvetica Neue", Font.PLAIN, 14);
+            base = new Font("Helvetica Neue", Font.PLAIN, 15);
         }
-        if (baseFont.getFamily().equals("Dialog"))
+        if (base.getFamily().equals("Dialog"))
         {
-            baseFont = new Font("Arial", Font.PLAIN, 14);
+            base = new Font("Arial", Font.PLAIN, 15);
         }
-        setFont(baseFont);
+        setFont(base);
     }
 
     public void showLoginPanel()

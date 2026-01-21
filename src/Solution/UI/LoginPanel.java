@@ -6,162 +6,124 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Modern macOS-inspired minimalist login screen
- *   - Underline-style fields
- *   - Flat rounded buttons
- *   - Centered vertical layout with breathing room
- *   - No heavy borders / visual noise
+ * Login panel with labeled fields and flat buttons
  */
 public class LoginPanel extends JPanel
 {
-    private final AuthFrame      parent;
-    private final AuthManager    auth;
-    private final JTextField     username;
-    private final JPasswordField password;
+    private final AuthFrame      frame;
+    private final AuthManager    authManager;
+    private final JTextField     usernameField;
+    private final JPasswordField passwordField;
 
-    public LoginPanel(AuthFrame parent, AuthManager auth)
+    public LoginPanel(AuthFrame frame, AuthManager authManager)
     {
-        this.parent = parent;
-        this.auth   = auth;
+        this.frame       = frame;
+        this.authManager = authManager;
 
         setLayout(new BorderLayout());
-        setBorder(BorderFactory.createEmptyBorder(100, 60, 100, 60));
+        setBorder(BorderFactory.createEmptyBorder(100, 70, 100, 70));
         setBackground(new Color(250, 250, 252));
 
-        Box vertical = Box.createVerticalBox();
-        vertical.setAlignmentX(CENTER_ALIGNMENT);
+        Box verticalStack = Box.createVerticalBox();
+        verticalStack.setAlignmentX(CENTER_ALIGNMENT);
 
         // Title
-        JLabel title = new JLabel("Sign In", SwingConstants.CENTER);
-        title.setFont(new Font("SF Pro Display", Font.PLAIN, 28));
-        fallbackFont(title, "Helvetica Neue", Font.PLAIN, 28);
-        title.setForeground(new Color(28, 28, 30));
-        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 80, 0));
-        vertical.add(title);
-        vertical.add(Box.createVerticalStrut(20));
+        JLabel titleLabel = new JLabel("Sign In", SwingConstants.CENTER);
+        titleLabel.setFont(new Font("SF Pro Display", Font.PLAIN, 28));
+        titleLabel.setForeground(new Color(28, 28, 30));
+        titleLabel.setBorder(BorderFactory.createEmptyBorder(0, 0, 70, 0));
+        verticalStack.add(titleLabel);
+        verticalStack.add(Box.createVerticalStrut(20));
 
-        // Fields
-        username = createUnderlineField("Username", 26);
-        vertical.add(username);
-        vertical.add(Box.createVerticalStrut(36));
+        // Username row
+        verticalStack.add(createLabeledField("USERNAME:", usernameField = new JTextField(26)));
+        verticalStack.add(Box.createVerticalStrut(32));
 
-        password = createUnderlinePasswordField("Password", 26);
-        vertical.add(password);
-        vertical.add(Box.createVerticalStrut(60));
+        // Password row
+        verticalStack.add(createLabeledField("PASSWORD:", passwordField = new JPasswordField(26)));
+        verticalStack.add(Box.createVerticalStrut(60));
 
         // Buttons
-        JPanel btnRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 0));
-        btnRow.setOpaque(false);
+        JPanel buttonRow = new JPanel(new FlowLayout(FlowLayout.CENTER, 48, 0));
+        buttonRow.setOpaque(false);
 
-        JButton signIn = createMacButton("Sign In");
-        signIn.addActionListener(e -> tryLogin());
-        btnRow.add(signIn);
+        JButton signInBtn = createFlatButton("Sign In");
+        signInBtn.addActionListener(e -> attemptLogin());
+        buttonRow.add(signInBtn);
 
-        JButton register = createMacButton("Register");
-        register.addActionListener(e -> parent.showRegistrationPanel());
-        btnRow.add(register);
+        JButton registerBtn = createFlatButton("Register");
+        registerBtn.addActionListener(e -> frame.showRegistrationPanel());
+        buttonRow.add(registerBtn);
 
-        vertical.add(btnRow);
+        verticalStack.add(buttonRow);
 
-        // Center the whole stack
-        JPanel center = new JPanel(new GridBagLayout());
-        center.setOpaque(false);
-        center.add(vertical);
+        // Center the stack vertically
+        JPanel centeringPanel = new JPanel(new GridBagLayout());
+        centeringPanel.setOpaque(false);
+        centeringPanel.add(verticalStack);
 
-        add(center, BorderLayout.CENTER);
+        add(centeringPanel, BorderLayout.CENTER);
     }
 
-    private JTextField createUnderlineField(String hint, int columns)
+    private JPanel createLabeledField(String labelText, JComponent field)
     {
-        JTextField f = new JTextField(columns);
-        styleUnderlineField(f, hint);
-        return f;
+        JPanel row = new JPanel(new BorderLayout(0, 6));
+        row.setOpaque(false);
+
+        JLabel label = new JLabel(labelText);
+        label.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
+        label.setForeground(new Color(70, 70, 75));
+        row.add(label, BorderLayout.NORTH);
+
+        field.setFont(new Font("SF Pro Text", Font.PLAIN, 17));
+        field.setForeground(new Color(44, 44, 46));
+        field.setCaretColor(new Color(10, 132, 255));
+        field.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(190, 190, 200)));
+        field.setBackground(new Color(250, 250, 252));
+        field.setOpaque(false);
+
+        row.add(field, BorderLayout.CENTER);
+        return row;
     }
 
-    private JPasswordField createUnderlinePasswordField(String hint, int columns)
+    private JButton createFlatButton(String text)
     {
-        JPasswordField f = new JPasswordField(columns);
-        styleUnderlineField(f, hint);
-        return f;
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
+        btn.setForeground(new Color(28, 28, 30));
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createEmptyBorder(12, 40, 12, 40));
+        btn.setBackground(new Color(240, 240, 245));
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
+        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return btn;
     }
 
-    private void styleUnderlineField(JTextField f, String hint)
+    private void attemptLogin()
     {
-        f.setFont(new Font("SF Pro Text", Font.PLAIN, 17));
-        fallbackFont(f, "Helvetica Neue", Font.PLAIN, 17);
-        f.setForeground(new Color(44, 44, 46));
-        f.setCaretColor(new Color(10, 132, 255));  // macOS accent
-        f.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(180, 180, 190)));
-        f.setBackground(new Color(250, 250, 252));
-        f.setOpaque(false);
-        f.setToolTipText(hint);
-    }
+        String username = usernameField.getText().trim();
+        String password = new String(passwordField.getPassword()).trim();
 
-    private JButton createMacButton(String label)
-    {
-        JButton b = new JButton(label);
-        b.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
-        fallbackFont(b, "Helvetica Neue", Font.PLAIN, 15);
-        b.setForeground(new Color(28, 28, 30));
-        b.setFocusPainted(false);
-        b.setBorder(BorderFactory.createEmptyBorder(12, 36, 12, 36));
-        b.setBackground(new Color(240, 240, 245));
-        b.setOpaque(true);
-        b.setBorderPainted(false);
-        b.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
-        // Slight rounding simulation (macOS-like)
-        b.setBorder(new javax.swing.border.AbstractBorder()
-        {
-            @Override
-            public void paintBorder(Component c, Graphics g, int x, int y, int w, int h)
-            {
-                // optional very light rounded rectangle if desired
-            }
-
-            @Override
-            public Insets getBorderInsets(Component c) { return new Insets(0,0,0,0); }
-
-            @Override
-            public boolean isBorderOpaque() { return false; }
-        });
-
-        return b;
-    }
-
-    private void fallbackFont(JComponent c, String name, int style, int size)
-    {
-        Font f = c.getFont();
-        if (f.getFamily().equals("Dialog") || f.getFamily().contains("SansSerif"))
-        {
-            c.setFont(new Font(name, style, size));
-        }
-    }
-
-    private void tryLogin()
-    {
-        String u = username.getText().trim();
-        String p = new String(password.getPassword()).trim();
-
-        if (u.isEmpty() || p.isEmpty())
+        if (username.isEmpty() || password.isEmpty())
         {
             JOptionPane.showMessageDialog(this,
-                    "Username and password are required.",
-                    "Missing Fields",
+                    "Please fill in both fields.",
+                    "Required Fields",
                     JOptionPane.WARNING_MESSAGE);
             return;
         }
 
         try
         {
-            auth.loginUser(u, p);
-            parent.showTaskPanel();
+            authManager.loginUser(username, password);
+            frame.showTaskPanel();
         }
         catch (IllegalArgumentException ex)
         {
             JOptionPane.showMessageDialog(this,
                     ex.getMessage(),
-                    "Sign In Failed",
+                    "Sign In Error",
                     JOptionPane.ERROR_MESSAGE);
         }
     }
