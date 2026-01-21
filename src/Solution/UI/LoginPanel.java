@@ -1,11 +1,16 @@
 package Solution.UI;
 
 import Solution.Logic.AuthManager;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Login panel styled to resemble classic macOS Aqua appearance
+ * Clean, minimalist login screen:
+ *   - Lots of whitespace
+ *   - Subtle borders only where functionally necessary
+ *   - Flat buttons
+ *   - Neutral color palette
  */
 public class LoginPanel extends JPanel
 {
@@ -14,99 +19,112 @@ public class LoginPanel extends JPanel
 
     public LoginPanel(AuthFrame frame, AuthManager authManager)
     {
-        setLayout(new BorderLayout(12, 12));
-        setBorder(BorderFactory.createEmptyBorder(20, 24, 20, 24));
-        setBackground(new Color(236, 236, 236));
+        setLayout(new BorderLayout(0, 40));
+        setBorder(BorderFactory.createEmptyBorder(60, 60, 60, 60));
+        setBackground(new Color(248, 248, 248));
 
-        // Main content panel with grid
+        // Center content vertically and horizontally
         JPanel content = new JPanel(new GridBagLayout());
         content.setOpaque(false);
+
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(8, 0, 8, 0);
-        gbc.anchor = GridBagConstraints.WEST;
+        gbc.insets = new Insets(12, 0, 12, 0);
+        gbc.anchor = GridBagConstraints.CENTER;
 
         // Title
         JLabel title = new JLabel("Sign In", SwingConstants.CENTER);
-        title.setFont(new Font("Lucida Grande", Font.BOLD, 18));
-        title.setForeground(new Color(0, 0, 0, 220));
-
-        gbc.gridx = 0;
+        title.setFont(new Font("Helvetica Neue", Font.PLAIN, 22));
+        title.setForeground(new Color(30, 30, 30));
         gbc.gridy = 0;
-        gbc.gridwidth = 2;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
         content.add(title, gbc);
 
-        // Username
-        gbc.gridy++;
-        gbc.gridwidth = 1;
-        gbc.anchor = GridBagConstraints.LINE_END;
-        content.add(new JLabel("Username:"), gbc);
+        // Form fields container
+        JPanel form = new JPanel(new GridBagLayout());
+        form.setOpaque(false);
+        GridBagConstraints fbc = new GridBagConstraints();
+        fbc.insets = new Insets(10, 0, 10, 0);
+        fbc.fill = GridBagConstraints.HORIZONTAL;
+        fbc.weightx = 1.0;
 
-        gbc.gridx = 1;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        gbc.fill = GridBagConstraints.HORIZONTAL;
-        gbc.weightx = 1.0;
-        usernameField = new JTextField(18);
-        styleTextField(usernameField);
-        content.add(usernameField, gbc);
+        // Username
+        fbc.gridy = 0;
+        usernameField = createMinimalTextField(20);
+        form.add(createLabeledField("Username", usernameField), fbc);
 
         // Password
-        gbc.gridx = 0;
-        gbc.gridy++;
-        gbc.weightx = 0;
-        gbc.anchor = GridBagConstraints.LINE_END;
-        content.add(new JLabel("Password:"), gbc);
+        fbc.gridy = 1;
+        passwordField = createMinimalPasswordField(20);
+        form.add(createLabeledField("Password", passwordField), fbc);
 
-        gbc.gridx = 1;
-        gbc.weightx = 1.0;
-        gbc.anchor = GridBagConstraints.LINE_START;
-        passwordField = new JPasswordField(18);
-        styleTextField(passwordField);
-        content.add(passwordField, gbc);
+        gbc.gridy = 1;
+        gbc.insets = new Insets(32, 0, 32, 0);
+        content.add(form, gbc);
 
         // Buttons
-        gbc.gridy++;
-        gbc.gridx = 0;
-        gbc.gridwidth = 2;
-        gbc.anchor = GridBagConstraints.CENTER;
-        gbc.fill = GridBagConstraints.NONE;
+        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 24, 0));
+        buttons.setOpaque(false);
 
-        JPanel buttonPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 0));
-        buttonPanel.setOpaque(false);
+        JButton loginBtn = createMinimalButton("Sign In");
+        loginBtn.addActionListener(e -> attemptLogin(frame, authManager));
+        buttons.add(loginBtn);
 
-        JButton loginButton = new JButton("Sign In");
-        styleButton(loginButton);
-        loginButton.addActionListener(e -> attemptLogin(frame, authManager));
-        buttonPanel.add(loginButton);
+        JButton registerBtn = createMinimalButton("Register");
+        registerBtn.addActionListener(e -> frame.showRegistrationPanel());
+        buttons.add(registerBtn);
 
-        JButton registerButton = new JButton("Register…");
-        styleButton(registerButton);
-        registerButton.addActionListener(e -> frame.showRegistrationPanel());
-        buttonPanel.add(registerButton);
-
-        content.add(buttonPanel, gbc);
+        gbc.gridy = 2;
+        gbc.insets = new Insets(0, 0, 0, 0);
+        content.add(buttons, gbc);
 
         add(content, BorderLayout.CENTER);
     }
 
-    private void styleTextField(JTextField field)
+    private JPanel createLabeledField(String labelText, JComponent field)
     {
-        field.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-        field.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(160, 160, 160)),
-                BorderFactory.createEmptyBorder(6, 8, 6, 8)));
-        field.setBackground(Color.WHITE);
+        JPanel panel = new JPanel(new BorderLayout(0, 6));
+        panel.setOpaque(false);
+
+        JLabel label = new JLabel(labelText);
+        label.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        label.setForeground(new Color(70, 70, 70));
+        panel.add(label, BorderLayout.NORTH);
+        panel.add(field, BorderLayout.CENTER);
+
+        return panel;
     }
 
-    private void styleButton(JButton button)
+    private JTextField createMinimalTextField(int columns)
     {
-        button.setFont(new Font("Lucida Grande", Font.PLAIN, 13));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createCompoundBorder(
-                BorderFactory.createLineBorder(new Color(120, 120, 120)),
-                BorderFactory.createEmptyBorder(6, 16, 6, 16)));
-        button.setBackground(new Color(240, 240, 240));
-        button.setOpaque(true);
+        JTextField field = new JTextField(columns);
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+        field.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(180, 180, 180)));
+        field.setBackground(new Color(248, 248, 248));
+        field.setOpaque(false);
+        field.setCaretColor(new Color(40, 40, 40));
+        return field;
+    }
+
+    private JPasswordField createMinimalPasswordField(int columns)
+    {
+        JPasswordField field = new JPasswordField(columns);
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+        field.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(180, 180, 180)));
+        field.setBackground(new Color(248, 248, 248));
+        field.setOpaque(false);
+        field.setCaretColor(new Color(40, 40, 40));
+        return field;
+    }
+
+    private JButton createMinimalButton(String text)
+    {
+        JButton btn = new JButton(text);
+        btn.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+        btn.setFocusPainted(false);
+        btn.setBorder(BorderFactory.createEmptyBorder(10, 28, 10, 28));
+        btn.setBackground(new Color(235, 235, 235));
+        btn.setOpaque(true);
+        btn.setBorderPainted(false);
+        return btn;
     }
 
     private void attemptLogin(AuthFrame frame, AuthManager authManager)
@@ -125,7 +143,7 @@ public class LoginPanel extends JPanel
         {
             JOptionPane.showMessageDialog(this,
                     ex.getMessage(),
-                    "Authentication Error",
+                    "Error",
                     JOptionPane.ERROR_MESSAGE);
         }
     }

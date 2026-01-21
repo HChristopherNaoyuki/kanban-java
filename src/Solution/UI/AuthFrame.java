@@ -2,11 +2,15 @@ package Solution.UI;
 
 import Solution.Logic.AuthManager;
 import Solution.Logic.TaskManager;
+
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application frame styled to resemble classic macOS Aqua look (early 2000s)
+ * Main application window with minimalist styling:
+ *   - Very light neutral background
+ *   - Generous padding
+ *   - Clean, simple appearance
  */
 public final class AuthFrame extends JFrame
 {
@@ -17,6 +21,7 @@ public final class AuthFrame extends JFrame
     {
         authManager = new AuthManager();
         taskManager = new TaskManager();
+
         setupFrame();
         showLoginPanel();
     }
@@ -24,18 +29,18 @@ public final class AuthFrame extends JFrame
     private void setupFrame()
     {
         setTitle("Task Manager");
-        setSize(420, 340);
+        setSize(460, 380);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Apple-like window background (very light gray/off-white)
-        getContentPane().setBackground(new Color(236, 236, 236));
+        // Very light neutral background
+        getContentPane().setBackground(new Color(248, 248, 248));
 
-        // Try to use a macOS-like font
-        Font defaultFont = new Font("Lucida Grande", Font.PLAIN, 13);
+        // Try to use a clean system font stack
+        Font defaultFont = new Font("Helvetica Neue", Font.PLAIN, 13);
         if (defaultFont.getFamily().equals("Dialog"))
         {
-            defaultFont = new Font("Dialog", Font.PLAIN, 13);
+            defaultFont = new Font("Arial", Font.PLAIN, 13);
         }
         setFont(defaultFont);
     }
