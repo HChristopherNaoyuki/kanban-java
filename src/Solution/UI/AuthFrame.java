@@ -7,10 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application window with minimalist styling:
- *   - Very light neutral background
- *   - Generous padding
- *   - Clean, simple appearance
+ * Main application frame – kept very light and spacious
  */
 public final class AuthFrame extends JFrame
 {
@@ -22,27 +19,29 @@ public final class AuthFrame extends JFrame
         authManager = new AuthManager();
         taskManager = new TaskManager();
 
-        setupFrame();
+        initWindow();
         showLoginPanel();
     }
 
-    private void setupFrame()
+    private void initWindow()
     {
         setTitle("Task Manager");
-        setSize(460, 380);
+        // ── Increased size so content is never clipped ──
+        setSize(480, 520);
+        setMinimumSize(new Dimension(460, 480));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        // Very light neutral background
-        getContentPane().setBackground(new Color(248, 248, 248));
+        // Very light modern neutral background
+        getContentPane().setBackground(new Color(250, 250, 252));
 
-        // Try to use a clean system font stack
-        Font defaultFont = new Font("Helvetica Neue", Font.PLAIN, 13);
-        if (defaultFont.getFamily().equals("Dialog"))
+        // Prefer clean system fonts
+        Font uiFont = new Font("Helvetica Neue", Font.PLAIN, 14);
+        if (uiFont.getFamily().equals("Dialog"))
         {
-            defaultFont = new Font("Arial", Font.PLAIN, 13);
+            uiFont = new Font("Arial", Font.PLAIN, 14);
         }
-        setFont(defaultFont);
+        setFont(uiFont);
     }
 
     public void showLoginPanel()
