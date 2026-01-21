@@ -6,11 +6,11 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Clean, minimalistic login screen with:
- * • Clear labels above fields
- * • Underline style input fields
- * • Flat modern buttons
- * • Generous whitespace
+ * Minimalist login panel compatible with Java 8
+ * - Clear labels above input fields
+ * - Underline-style text fields (bottom border only)
+ * - Flat buttons with generous padding
+ * - High vertical whitespace
  */
 public class LoginPanel extends JPanel
 {
@@ -32,27 +32,27 @@ public class LoginPanel extends JPanel
         vertical.setAlignmentX(CENTER_ALIGNMENT);
 
         addTitle(vertical);
-        addSpacing(vertical, 24);
+        vertical.add(Box.createVerticalStrut(24));
 
         addLabeledField(vertical, "USERNAME:", usernameField = new JTextField(26));
-        addSpacing(vertical, 36);
+        vertical.add(Box.createVerticalStrut(36));
 
         addLabeledField(vertical, "PASSWORD:", passwordField = new JPasswordField(26));
-        addSpacing(vertical, 64);
+        vertical.add(Box.createVerticalStrut(64));
 
-        addButtonsRow(vertical);
+        addButtonRow(vertical);
 
-        JPanel centeringWrapper = new JPanel(new GridBagLayout());
-        centeringWrapper.setOpaque(false);
-        centeringWrapper.add(vertical);
+        JPanel centeringPanel = new JPanel(new GridBagLayout());
+        centeringPanel.setOpaque(false);
+        centeringPanel.add(vertical);
 
-        add(centeringWrapper, BorderLayout.CENTER);
+        add(centeringPanel, BorderLayout.CENTER);
     }
 
     private void addTitle(Box container)
     {
         JLabel title = new JLabel("Sign In", SwingConstants.CENTER);
-        title.setFont(new Font("SF Pro Display", Font.PLAIN, 30));
+        title.setFont(new Font("Helvetica Neue", Font.PLAIN, 30));
         title.setForeground(new Color(28, 28, 30));
         title.setBorder(BorderFactory.createEmptyBorder(0, 0, 60, 0));
         container.add(title);
@@ -60,47 +60,49 @@ public class LoginPanel extends JPanel
 
     private void addLabeledField(Box container, String labelText, JComponent field)
     {
-        container.add(createLabeledField(labelText, field));
+        container.add(createLabeledInput(labelText, field));
     }
 
-    private JPanel createLabeledField(String labelText, JComponent field)
+    private JPanel createLabeledInput(String labelText, JComponent field)
     {
         JPanel panel = new JPanel(new BorderLayout(0, 8));
         panel.setOpaque(false);
 
         JLabel label = new JLabel(labelText);
-        label.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
+        label.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
         label.setForeground(new Color(70, 70, 75));
         panel.add(label, BorderLayout.NORTH);
 
-        styleInputField(field);
+        styleTextComponent(field);
         panel.add(field, BorderLayout.CENTER);
 
         return panel;
     }
 
-    private void styleInputField(JComponent field)
+    private void styleTextComponent(JComponent comp)
     {
-        field.setFont(new Font("SF Pro Text", Font.PLAIN, 17));
-        field.setForeground(new Color(44, 44, 46));
-        field.setCaretColor(new Color(10, 132, 255)); // nice accent color
-        field.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(190, 190, 200)));
-        field.setBackground(new Color(250, 250, 252));
-        field.setOpaque(false);
+        comp.setFont(new Font("Helvetica Neue", Font.PLAIN, 17));
+        comp.setForeground(new Color(44, 44, 46));
+
+        // Java 8 compatible: only bottom border, no setCaretColor()
+        comp.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(190, 190, 200)));
+
+        comp.setBackground(new Color(250, 250, 252));
+        comp.setOpaque(false);
     }
 
-    private void addButtonsRow(Box container)
+    private void addButtonRow(Box container)
     {
         JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
         buttons.setOpaque(false);
 
-        JButton signIn = createFlatButton("Sign In");
-        signIn.addActionListener(e -> tryLogin());
-        buttons.add(signIn);
+        JButton signInBtn = createFlatButton("Sign In");
+        signInBtn.addActionListener(e -> attemptLogin());
+        buttons.add(signInBtn);
 
-        JButton register = createFlatButton("Register");
-        register.addActionListener(e -> frame.showRegistrationPanel());
-        buttons.add(register);
+        JButton registerBtn = createFlatButton("Register");
+        registerBtn.addActionListener(e -> frame.showRegistrationPanel());
+        buttons.add(registerBtn);
 
         container.add(buttons);
     }
@@ -108,7 +110,7 @@ public class LoginPanel extends JPanel
     private JButton createFlatButton(String text)
     {
         JButton btn = new JButton(text);
-        btn.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
+        btn.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
         btn.setForeground(new Color(28, 28, 30));
         btn.setFocusPainted(false);
         btn.setBorder(BorderFactory.createEmptyBorder(14, 48, 14, 48));
@@ -116,23 +118,20 @@ public class LoginPanel extends JPanel
         btn.setOpaque(true);
         btn.setBorderPainted(false);
         btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-
         return btn;
     }
 
-    private void addSpacing(Box container, int pixels)
-    {
-        container.add(Box.createVerticalStrut(pixels));
-    }
-
-    private void tryLogin()
+    private void attemptLogin()
     {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
 
-        if (username.isBlank() || password.isBlank())
+        if (username.isEmpty() || password.isEmpty())
         {
-            showWarning("Please fill in both username and password.");
+            JOptionPane.showMessageDialog(this,
+                    "Please enter both username and password.",
+                    "Required Fields",
+                    JOptionPane.WARNING_MESSAGE);
             return;
         }
 
@@ -148,13 +147,5 @@ public class LoginPanel extends JPanel
                     "Login Failed",
                     JOptionPane.ERROR_MESSAGE);
         }
-    }
-
-    private void showWarning(String message)
-    {
-        JOptionPane.showMessageDialog(this,
-                message,
-                "Missing Information",
-                JOptionPane.WARNING_MESSAGE);
     }
 }
