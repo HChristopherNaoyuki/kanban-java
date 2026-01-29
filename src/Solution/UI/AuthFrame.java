@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application window with Apple-like minimalism
- * Controls navigation between authentication and task panels
+ * Main application window implementing Apple's Human Interface Guidelines
+ * Provides consistent navigation foundation and visual structure
  */
 public final class AuthFrame extends JFrame
 {
@@ -22,53 +22,35 @@ public final class AuthFrame extends JFrame
         showLoginPanel();
     }
     
+    /**
+     * Initializes window with Apple-like design principles
+     * Emphasizes clarity, consistency, and visual hierarchy
+     */
     private void initializeWindow()
     {
         setTitle("Task Manager");
-        setSize(540, 640);
-        setMinimumSize(new Dimension(500, 560));
+        setSize(520, 600);
+        setMinimumSize(new Dimension(480, 520));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        // Apple-like light gray background
-        getContentPane().setBackground(new Color(248, 248, 248));
+        // System background color for consistent appearance
+        getContentPane().setBackground(UIManager.getColor("Panel.background"));
         
-        // Use system font stack for best compatibility
-        setUIFont();
+        // Use system look and feel for native appearance
+        try
+        {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception e)
+        {
+            // Fallback to default look and feel
+        }
     }
     
     /**
-     * Sets consistent Apple-like fonts across the application
+     * Shows login panel - entry point for user authentication
      */
-    private void setUIFont()
-    {
-        Font baseFont;
-        
-        // Try preferred Apple fonts first
-        String[] fontCandidates = {
-            "SF Pro Display",
-            "SF Pro Text", 
-            "Helvetica Neue",
-            "Segoe UI",
-            "Arial"
-        };
-        
-        for (String fontName : fontCandidates)
-        {
-            Font testFont = new Font(fontName, Font.PLAIN, 13);
-            if (!testFont.getFamily().equals(Font.DIALOG))
-            {
-                baseFont = testFont;
-                setFont(baseFont);
-                return;
-            }
-        }
-        
-        // Fallback to system font
-        baseFont = new Font("Dialog", Font.PLAIN, 13);
-        setFont(baseFont);
-    }
-    
     public void showLoginPanel()
     {
         getContentPane().removeAll();
@@ -77,6 +59,9 @@ public final class AuthFrame extends JFrame
         repaint();
     }
     
+    /**
+     * Shows registration panel for new account creation
+     */
     public void showRegistrationPanel()
     {
         getContentPane().removeAll();
@@ -85,6 +70,10 @@ public final class AuthFrame extends JFrame
         repaint();
     }
     
+    /**
+     * Shows main task management interface
+     * Core workspace for task operations
+     */
     public void showTaskPanel()
     {
         getContentPane().removeAll();
