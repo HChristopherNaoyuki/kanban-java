@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application window with optimized 10x16 aspect ratio
+ * Main application window optimized for 2160x1440 aspect ratio (3:2)
  * Provides consistent navigation with Apple-inspired design
  */
 public final class AuthFrame extends JFrame
@@ -15,7 +15,7 @@ public final class AuthFrame extends JFrame
     private final TaskManager taskManager;
     
     /**
-     * Constructs the main application window with 10x16 aspect ratio
+     * Constructs the main application window with 2160x1440 aspect ratio
      */
     public AuthFrame()
     {
@@ -26,16 +26,16 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Initializes window properties with 10x16 aspect ratio
-     * Base size: 400x640 (10:16 aspect ratio)
+     * Initializes window properties with 2160x1440 aspect ratio
+     * Base size: 900x600 (3:2 aspect ratio)
      */
     private void initializeWindow()
     {
         setTitle("Task Manager");
         
-        // 10:16 aspect ratio - base size 400x640
-        setSize(400, 640);
-        setMinimumSize(new Dimension(350, 560));
+        // 2160x1440 aspect ratio (3:2) - scaled down to 900x600 for usability
+        setSize(900, 600);
+        setMinimumSize(new Dimension(800, 533)); // Maintains 3:2 aspect ratio
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -53,6 +53,9 @@ public final class AuthFrame extends JFrame
             // Fall back to default look and feel
             System.err.println("Unable to set system look and feel: " + e.getMessage());
         }
+        
+        // Center the window on screen
+        setLocationRelativeTo(null);
     }
     
     /**

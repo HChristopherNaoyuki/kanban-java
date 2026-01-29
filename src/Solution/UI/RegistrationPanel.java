@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Registration interface optimized for 10x16 aspect ratio
+ * Registration interface optimized for 2160x1440 aspect ratio (3:2)
  * Features split layout with form on left and requirements on right
  */
 public class RegistrationPanel extends JPanel
@@ -25,78 +25,40 @@ public class RegistrationPanel extends JPanel
         setLayout(new BorderLayout());
         setBackground(new Color(248, 248, 248));
         
-        // Create scrollable content for better fit
+        // Create main content panel
         JPanel contentPanel = createContentPanel();
-        JScrollPane scrollPane = new JScrollPane(contentPanel);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        
-        add(scrollPane, BorderLayout.CENTER);
+        add(contentPanel, BorderLayout.CENTER);
     }
     
     /**
-     * Creates the main content panel for 10x16 ratio
+     * Creates the main content panel for 2160x1440 ratio
      */
     private JPanel createContentPanel()
     {
-        JPanel panel = new JPanel();
-        panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+        JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(new Color(248, 248, 248));
-        panel.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
+        panel.setBorder(BorderFactory.createEmptyBorder(30, 30, 30, 30));
         
-        // Title section
-        panel.add(createTitleSection());
-        panel.add(Box.createVerticalStrut(20));
-        
-        // Main content split panel
-        panel.add(createSplitContentPanel());
-        
-        return panel;
-    }
-    
-    /**
-     * Creates the title section
-     */
-    private JPanel createTitleSection()
-    {
-        JPanel titlePanel = new JPanel();
-        titlePanel.setLayout(new BoxLayout(titlePanel, BoxLayout.Y_AXIS));
-        titlePanel.setBackground(new Color(248, 248, 248));
-        titlePanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        JLabel title = new JLabel("Create Account", SwingConstants.CENTER);
-        title.setFont(new Font("Helvetica Neue", Font.BOLD, 22));
-        title.setForeground(new Color(28, 28, 30));
-        title.setAlignmentX(Component.CENTER_ALIGNMENT);
-        
-        JLabel subtitle = new JLabel("Join Task Manager", SwingConstants.CENTER);
-        subtitle.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
-        subtitle.setForeground(new Color(140, 140, 145));
-        subtitle.setAlignmentX(Component.CENTER_ALIGNMENT);
-        subtitle.setBorder(BorderFactory.createEmptyBorder(4, 0, 0, 0));
-        
-        titlePanel.add(title);
-        titlePanel.add(subtitle);
-        
-        return titlePanel;
-    }
-    
-    /**
-     * Creates the split content panel with form and requirements
-     */
-    private JPanel createSplitContentPanel()
-    {
-        JPanel splitPanel = new JPanel();
-        splitPanel.setLayout(new GridLayout(1, 2, 15, 0));
-        splitPanel.setBackground(new Color(248, 248, 248));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
+        gbc.insets = new Insets(0, 0, 0, 20);
         
         // Left panel: Form
-        splitPanel.add(createFormPanel());
+        JPanel formPanel = createFormPanel();
+        panel.add(formPanel, gbc);
+        
+        gbc.gridx = 1;
+        gbc.insets = new Insets(0, 20, 0, 0);
         
         // Right panel: Requirements
-        splitPanel.add(createRequirementsPanel());
+        JPanel requirementsPanel = createRequirementsPanel();
+        panel.add(requirementsPanel, gbc);
         
-        return splitPanel;
+        return panel;
     }
     
     /**
@@ -109,18 +71,26 @@ public class RegistrationPanel extends JPanel
         panel.setBackground(Color.WHITE);
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(220, 220, 225), 1),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)
+            BorderFactory.createEmptyBorder(40, 40, 40, 40)
         ));
+        
+        // Title
+        JLabel title = new JLabel("Create Account", SwingConstants.LEFT);
+        title.setFont(new Font("Helvetica Neue", Font.BOLD, 28));
+        title.setForeground(new Color(28, 28, 30));
+        title.setAlignmentX(Component.LEFT_ALIGNMENT);
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 30, 0));
+        panel.add(title);
         
         // Form fields
         panel.add(createFormField("First Name", firstNameField = createTextField()));
-        panel.add(Box.createVerticalStrut(12));
-        panel.add(createFormField("Last Name", lastNameField = createTextField()));
-        panel.add(Box.createVerticalStrut(12));
-        panel.add(createFormField("Username", usernameField = createTextField()));
-        panel.add(Box.createVerticalStrut(12));
-        panel.add(createFormField("Password", passwordField = createPasswordField()));
         panel.add(Box.createVerticalStrut(20));
+        panel.add(createFormField("Last Name", lastNameField = createTextField()));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createFormField("Username", usernameField = createTextField()));
+        panel.add(Box.createVerticalStrut(20));
+        panel.add(createFormField("Password", passwordField = createPasswordField()));
+        panel.add(Box.createVerticalStrut(40));
         
         // Action buttons
         panel.add(createActionButtons());
@@ -129,7 +99,7 @@ public class RegistrationPanel extends JPanel
     }
     
     /**
-     * Creates a labeled form field
+     * Creates a labeled form field for 2160x1440
      */
     private JPanel createFormField(String labelText, JComponent field)
     {
@@ -139,14 +109,14 @@ public class RegistrationPanel extends JPanel
         fieldPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         JLabel label = new JLabel(labelText);
-        label.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        label.setFont(new Font("Helvetica Neue", Font.PLAIN, 16));
         label.setForeground(new Color(100, 100, 105));
         label.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         fieldPanel.add(label);
-        fieldPanel.add(Box.createVerticalStrut(5));
+        fieldPanel.add(Box.createVerticalStrut(8));
         fieldPanel.add(field);
         
         return fieldPanel;
@@ -157,9 +127,9 @@ public class RegistrationPanel extends JPanel
      */
     private JPanel createActionButtons()
     {
-        JPanel buttonsPanel = new JPanel();
-        buttonsPanel.setLayout(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        JPanel buttonsPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         buttonsPanel.setBackground(Color.WHITE);
+        buttonsPanel.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         JButton cancelButton = new JButton("Cancel");
         styleSecondaryButton(cancelButton);
@@ -185,24 +155,24 @@ public class RegistrationPanel extends JPanel
         panel.setBackground(new Color(245, 245, 247));
         panel.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(220, 220, 225), 1),
-            BorderFactory.createEmptyBorder(20, 20, 20, 20)
+            BorderFactory.createEmptyBorder(40, 35, 40, 35)
         ));
         
         JLabel title = new JLabel("Account Requirements");
-        title.setFont(new Font("Helvetica Neue", Font.BOLD, 16));
+        title.setFont(new Font("Helvetica Neue", Font.BOLD, 22));
         title.setForeground(new Color(28, 28, 30));
         title.setAlignmentX(Component.LEFT_ALIGNMENT);
-        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 15, 0));
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 25, 0));
         panel.add(title);
         
         // Requirements content
         panel.add(createRequirementItem(
             "Username must contain '_' and be 5 characters or less"));
-        panel.add(Box.createVerticalStrut(8));
+        panel.add(Box.createVerticalStrut(15));
         
         panel.add(createRequirementItem(
             "Password must be at least 8 characters"));
-        panel.add(Box.createVerticalStrut(8));
+        panel.add(Box.createVerticalStrut(15));
         
         panel.add(createRequirementItem(
             "Include uppercase letter, number, and special character"));
@@ -214,69 +184,74 @@ public class RegistrationPanel extends JPanel
     }
     
     /**
-     * Creates a requirement item with bullet point
+     * Creates a requirement item with bullet point for 2160x1440
      */
     private JPanel createRequirementItem(String text)
     {
-        JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 5, 0));
+        JPanel itemPanel = new JPanel(new FlowLayout(FlowLayout.LEFT, 8, 0));
         itemPanel.setBackground(new Color(245, 245, 247));
         
         JLabel bullet = new JLabel("•");
-        bullet.setFont(new Font("Helvetica Neue", Font.PLAIN, 12));
-        bullet.setForeground(new Color(100, 100, 105));
+        bullet.setFont(new Font("Helvetica Neue", Font.BOLD, 16));
+        bullet.setForeground(new Color(0, 122, 255));
         
-        JLabel textLabel = new JLabel(text);
-        textLabel.setFont(new Font("Helvetica Neue", Font.PLAIN, 12));
-        textLabel.setForeground(new Color(100, 100, 105));
+        JTextArea textArea = new JTextArea(text);
+        textArea.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
+        textArea.setForeground(new Color(100, 100, 105));
+        textArea.setBackground(new Color(245, 245, 247));
+        textArea.setEditable(false);
+        textArea.setLineWrap(true);
+        textArea.setWrapStyleWord(true);
+        textArea.setBorder(BorderFactory.createEmptyBorder(0, 0, 0, 0));
         
         itemPanel.add(bullet);
-        itemPanel.add(textLabel);
+        itemPanel.add(textArea);
         
         return itemPanel;
     }
     
     /**
-     * Creates a styled text field
+     * Creates a styled text field for 2160x1440
      */
     private JTextField createTextField()
     {
         JTextField field = new JTextField();
-        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
-        field.setMaximumSize(new Dimension(1000, 34));
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 17));
+        field.setMaximumSize(new Dimension(1000, 50));
         field.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
-            BorderFactory.createEmptyBorder(7, 9, 7, 9)
+            BorderFactory.createEmptyBorder(12, 15, 12, 15)
         ));
         field.setBackground(Color.WHITE);
         return field;
     }
     
     /**
-     * Creates a styled password field
+     * Creates a styled password field for 2160x1440
      */
     private JPasswordField createPasswordField()
     {
         JPasswordField field = new JPasswordField();
-        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
-        field.setMaximumSize(new Dimension(1000, 34));
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 17));
+        field.setMaximumSize(new Dimension(1000, 50));
         field.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
-            BorderFactory.createEmptyBorder(7, 9, 7, 9)
+            BorderFactory.createEmptyBorder(12, 15, 12, 15)
         ));
         field.setBackground(Color.WHITE);
         return field;
     }
     
     /**
-     * Styles a primary button with consistent theming
+     * Styles a primary button with consistent theming for 2160x1440
      */
     private void stylePrimaryButton(JButton button)
     {
-        button.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
+        button.setFont(new Font("Helvetica Neue", Font.BOLD, 16));
         button.setForeground(Color.WHITE);
         button.setBackground(new Color(0, 122, 255));
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(9, 22, 9, 22));
+        button.setBorder(BorderFactory.createEmptyBorder(14, 35, 14, 35));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         // Hover effect
@@ -297,17 +272,17 @@ public class RegistrationPanel extends JPanel
     }
     
     /**
-     * Styles a secondary button with consistent theming
+     * Styles a secondary button with consistent theming for 2160x1440
      */
     private void styleSecondaryButton(JButton button)
     {
-        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
         button.setForeground(new Color(100, 100, 105));
         button.setBackground(new Color(240, 240, 242));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
-            BorderFactory.createEmptyBorder(8, 20, 8, 20)
+            BorderFactory.createEmptyBorder(12, 30, 12, 30)
         ));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
