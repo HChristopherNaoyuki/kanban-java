@@ -157,18 +157,21 @@ The application follows Model-View-Controller (MVC) architecture:
 kanban-java/
 ├── src/
 │   └── Solution/
-│       ├── Solution.java             # Main application entry point
+│       ├── Solution.java
+│       ├── Documentation/
+│       │   ├── Documentation.md
+│       │   └── Disclaimer.md
 │       ├── Logic/
-│       │   ├── AuthManager.java      # User authentication and registration
-│       │   ├── TaskManager.java      # Task creation and management
-│       │   └── Validator.java        # Input validation utilities
+│       │   ├── AuthManager.java
+│       │   ├── TaskManager.java
+│       │   └── Validator.java
 │       └── UI/
-│           ├── AuthFrame.java        # Main window controller
-│           ├── RoundedButton.java    # Custom rounded button component
-│           ├── LoginPanel.java       # User authentication interface
-│           ├── RegistrationPanel.java # User registration interface
-│           └── TaskPanel.java        # Task management interface
-└── README.md                         # This documentation file
+│           ├── AuthFrame.java
+│           ├── RoundedButton.java
+│           ├── LoginPanel.java
+│           ├── RegistrationPanel.java
+│           └── TaskPanel.java
+└── README.md
 ```
 
 ## Validation Rules
