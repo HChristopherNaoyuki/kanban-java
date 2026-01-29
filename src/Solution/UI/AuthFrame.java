@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application window with Apple-inspired design
- * Manages navigation between authentication and task management panels
+ * Main application window with optimized 10x16 aspect ratio
+ * Provides consistent navigation with Apple-inspired design
  */
 public final class AuthFrame extends JFrame
 {
@@ -15,7 +15,7 @@ public final class AuthFrame extends JFrame
     private final TaskManager taskManager;
     
     /**
-     * Constructs the main application window
+     * Constructs the main application window with 10x16 aspect ratio
      */
     public AuthFrame()
     {
@@ -26,36 +26,37 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Initializes window properties with Apple design principles
+     * Initializes window properties with 10x16 aspect ratio
+     * Base size: 400x640 (10:16 aspect ratio)
      */
     private void initializeWindow()
     {
         setTitle("Task Manager");
-        setSize(500, 550);
-        setMinimumSize(new Dimension(480, 500));
+        
+        // 10:16 aspect ratio - base size 400x640
+        setSize(400, 640);
+        setMinimumSize(new Dimension(350, 560));
+        
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        // Use system colors for consistent appearance across platforms
-        getContentPane().setBackground(UIManager.getColor("Panel.background"));
+        // Use light gray background for Apple-like appearance
+        getContentPane().setBackground(new Color(248, 248, 248));
         
-        // Set system look and feel for native appearance
+        // Set system look and feel for consistent appearance
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception e)
         {
-            // Use default look and feel if system L&F fails
+            // Fall back to default look and feel
             System.err.println("Unable to set system look and feel: " + e.getMessage());
         }
-        
-        // Center window on screen
-        setLocationRelativeTo(null);
     }
     
     /**
-     * Displays the login panel for user authentication
+     * Shows the login panel for user authentication
      */
     public void showLoginPanel()
     {
@@ -66,7 +67,7 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Displays the registration panel for new account creation
+     * Shows the registration panel for new account creation
      */
     public void showRegistrationPanel()
     {
@@ -77,7 +78,7 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Displays the main task management panel
+     * Shows the main task management panel
      */
     public void showTaskPanel()
     {

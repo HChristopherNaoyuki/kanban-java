@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Enhanced task management interface with improved visual layout
- * Provides clean task display and intuitive controls
+ * Task management interface optimized for 10x16 aspect ratio
+ * Features consistent button theming and efficient space usage
  */
 public class TaskPanel extends JPanel
 {
@@ -31,7 +31,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Initializes all components
+     * Initializes all components for 10x16 layout
      */
     private void initializeComponents()
     {
@@ -41,7 +41,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Creates the header panel with user info and navigation
+     * Creates the header panel with user info
      */
     private JPanel createHeaderPanel()
     {
@@ -49,7 +49,7 @@ public class TaskPanel extends JPanel
         header.setBackground(Color.WHITE);
         header.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(220, 220, 225)),
-            BorderFactory.createEmptyBorder(15, 25, 15, 25)
+            BorderFactory.createEmptyBorder(12, 20, 12, 20)
         ));
         
         // Welcome message
@@ -58,11 +58,12 @@ public class TaskPanel extends JPanel
         String fullName = firstName + " " + lastName;
         
         JLabel welcomeLabel = new JLabel("Welcome, " + fullName);
-        welcomeLabel.setFont(new Font("Helvetica Neue", Font.BOLD, 20));
+        welcomeLabel.setFont(new Font("Helvetica Neue", Font.BOLD, 18));
         welcomeLabel.setForeground(new Color(28, 28, 30));
         
-        // Logout button
-        JButton logoutButton = createTextButton("Sign Out");
+        // Sign Out button with consistent theming
+        JButton logoutButton = new JButton("Sign Out");
+        styleSecondaryButton(logoutButton);
         logoutButton.addActionListener(e -> parentFrame.showLoginPanel());
         
         header.add(welcomeLabel, BorderLayout.WEST);
@@ -72,20 +73,19 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Creates the main content panel with task display
+     * Creates the main content panel
      */
     private JPanel createContentPanel()
     {
         JPanel content = new JPanel(new BorderLayout());
         content.setBackground(new Color(248, 248, 248));
-        content.setBorder(BorderFactory.createEmptyBorder(25, 25, 25, 25));
+        content.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
         // Task display area
         taskDisplayArea = createTaskDisplayArea();
         JScrollPane scrollPane = new JScrollPane(taskDisplayArea);
         scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 225), 1));
-        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        scrollPane.setBackground(Color.WHITE);
+        scrollPane.getVerticalScrollBar().setUnitIncrement(12);
         
         content.add(scrollPane, BorderLayout.CENTER);
         
@@ -93,7 +93,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Creates the task display text area with formatting
+     * Creates the task display text area
      */
     private JTextArea createTaskDisplayArea()
     {
@@ -101,12 +101,12 @@ public class TaskPanel extends JPanel
         area.setEditable(false);
         area.setLineWrap(true);
         area.setWrapStyleWord(true);
-        area.setFont(new Font("Menlo", Font.PLAIN, 13));
+        area.setFont(new Font("Monaco", Font.PLAIN, 12));
         area.setBackground(Color.WHITE);
         area.setForeground(new Color(50, 50, 55));
-        area.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        area.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         
-        // Set initial text with formatting
+        // Set initial text
         area.setText("No tasks available. Add your first task to get started.");
         
         return area;
@@ -122,31 +122,28 @@ public class TaskPanel extends JPanel
         footer.setBackground(new Color(248, 248, 248));
         footer.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(220, 220, 225)),
-            BorderFactory.createEmptyBorder(20, 25, 20, 25)
+            BorderFactory.createEmptyBorder(15, 15, 15, 15)
         ));
         
-        // Primary actions section
-        JPanel primarySection = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
-        primarySection.setBackground(new Color(248, 248, 248));
+        // Primary action buttons
+        JPanel primaryPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
+        primaryPanel.setBackground(new Color(248, 248, 248));
         
-        JButton addTaskButton = createPrimaryButton("Add New Task");
+        JButton addTaskButton = new JButton("Add Task");
+        stylePrimaryButton(addTaskButton);
         addTaskButton.addActionListener(e -> showAddTaskDialog());
         
-        JButton viewAllButton = createSecondaryButton("View All Tasks");
+        JButton viewAllButton = new JButton("View All");
+        styleSecondaryButton(viewAllButton);
         viewAllButton.addActionListener(e -> showAllTasks());
         
-        primarySection.add(addTaskButton);
-        primarySection.add(viewAllButton);
+        primaryPanel.add(addTaskButton);
+        primaryPanel.add(viewAllButton);
         
-        // Divider
-        JSeparator divider = new JSeparator(JSeparator.HORIZONTAL);
-        divider.setForeground(new Color(220, 220, 225));
-        divider.setMaximumSize(new Dimension(400, 1));
-        
-        // Secondary actions section
-        JPanel secondarySection = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 0));
-        secondarySection.setBackground(new Color(248, 248, 248));
-        secondarySection.setBorder(BorderFactory.createEmptyBorder(15, 0, 0, 0));
+        // Secondary action buttons
+        JPanel secondaryPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 8, 0));
+        secondaryPanel.setBackground(new Color(248, 248, 248));
+        secondaryPanel.setBorder(BorderFactory.createEmptyBorder(10, 0, 0, 0));
         
         JButton searchButton = createTertiaryButton("Search by Developer");
         searchButton.addActionListener(e -> showSearchDialog());
@@ -154,29 +151,41 @@ public class TaskPanel extends JPanel
         JButton longestButton = createTertiaryButton("Longest Task");
         longestButton.addActionListener(e -> showLongestTask());
         
-        secondarySection.add(searchButton);
-        secondarySection.add(longestButton);
+        secondaryPanel.add(searchButton);
+        secondaryPanel.add(longestButton);
         
-        footer.add(primarySection);
-        footer.add(Box.createVerticalStrut(15));
-        footer.add(divider);
-        footer.add(Box.createVerticalStrut(15));
-        footer.add(secondarySection);
+        footer.add(primaryPanel);
+        footer.add(secondaryPanel);
         
         return footer;
     }
     
     /**
-     * Creates a primary action button
+     * Creates a tertiary button (text-only style)
      */
-    private JButton createPrimaryButton(String text)
+    private JButton createTertiaryButton(String text)
     {
         JButton button = new JButton(text);
-        button.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 12));
+        button.setForeground(new Color(0, 122, 255));
+        button.setBorder(BorderFactory.createEmptyBorder(5, 12, 5, 12));
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        return button;
+    }
+    
+    /**
+     * Styles a primary button with consistent theming
+     */
+    private void stylePrimaryButton(JButton button)
+    {
+        button.setFont(new Font("Helvetica Neue", Font.BOLD, 13));
         button.setForeground(Color.WHITE);
         button.setBackground(new Color(0, 122, 255));
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(10, 25, 10, 25));
+        button.setBorder(BorderFactory.createEmptyBorder(8, 22, 8, 22));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         // Hover effect
@@ -194,59 +203,22 @@ public class TaskPanel extends JPanel
                 button.setBackground(new Color(0, 122, 255));
             }
         });
-        
-        return button;
     }
     
     /**
-     * Creates a secondary action button
+     * Styles a secondary button with consistent theming
      */
-    private JButton createSecondaryButton(String text)
+    private void styleSecondaryButton(JButton button)
     {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 12));
         button.setForeground(new Color(100, 100, 105));
         button.setBackground(new Color(240, 240, 242));
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
-            BorderFactory.createEmptyBorder(9, 22, 9, 22)
+            BorderFactory.createEmptyBorder(7, 18, 7, 18)
         ));
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
-        return button;
-    }
-    
-    /**
-     * Creates a tertiary action button
-     */
-    private JButton createTertiaryButton(String text)
-    {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
-        button.setForeground(new Color(0, 122, 255));
-        button.setBorder(BorderFactory.createEmptyBorder(6, 15, 6, 15));
-        button.setContentAreaFilled(false);
-        button.setFocusPainted(false);
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
-        return button;
-    }
-    
-    /**
-     * Creates a text-only button
-     */
-    private JButton createTextButton(String text)
-    {
-        JButton button = new JButton(text);
-        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
-        button.setForeground(new Color(0, 122, 255));
-        button.setBorder(BorderFactory.createEmptyBorder(4, 10, 4, 10));
-        button.setContentAreaFilled(false);
-        button.setFocusPainted(false);
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
-        return button;
     }
     
     /**

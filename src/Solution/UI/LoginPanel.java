@@ -5,8 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Clean, minimal login interface with Apple-inspired design
- * Provides intuitive authentication with clear visual hierarchy
+ * Login interface optimized for 10x16 aspect ratio
+ * Features consistent button theming and clean layout
  */
 public class LoginPanel extends JPanel
 {
@@ -23,26 +23,27 @@ public class LoginPanel extends JPanel
         setLayout(new BorderLayout());
         setBackground(new Color(248, 248, 248));
         
-        // Create main content panel
+        // Create centered content
         JPanel contentPanel = createContentPanel();
         add(contentPanel, BorderLayout.CENTER);
     }
     
     /**
-     * Creates the main content panel with centered layout
+     * Creates the main content panel optimized for 10x16 ratio
      */
     private JPanel createContentPanel()
     {
         JPanel panel = new JPanel(new GridBagLayout());
         panel.setBackground(new Color(248, 248, 248));
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.gridx = 0;
         gbc.gridy = 0;
-        gbc.insets = new Insets(0, 0, 0, 0);
-        gbc.fill = GridBagConstraints.NONE;
+        gbc.weightx = 1.0;
+        gbc.weighty = 1.0;
+        gbc.fill = GridBagConstraints.BOTH;
         
-        // Add centered content
         JPanel centerPanel = createCenteredContent();
         panel.add(centerPanel, gbc);
         
@@ -50,27 +51,25 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Creates the centered content with proper spacing
+     * Creates centered content with proper spacing
      */
     private JPanel createCenteredContent()
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(new Color(248, 248, 248));
-        panel.setBorder(BorderFactory.createEmptyBorder(60, 40, 60, 40));
-        panel.setMaximumSize(new Dimension(400, 500));
         
-        // Application title
+        // Title section
         panel.add(createTitleLabel());
-        panel.add(Box.createVerticalStrut(40));
-        
-        // Form fields
-        panel.add(createFormSection());
         panel.add(Box.createVerticalStrut(30));
         
-        // Sign In button
+        // Form section
+        panel.add(createFormSection());
+        panel.add(Box.createVerticalStrut(25));
+        
+        // Action buttons
         panel.add(createSignInButton());
-        panel.add(Box.createVerticalStrut(20));
+        panel.add(Box.createVerticalStrut(15));
         
         // Registration link
         panel.add(createRegistrationLink());
@@ -84,9 +83,10 @@ public class LoginPanel extends JPanel
     private JLabel createTitleLabel()
     {
         JLabel label = new JLabel("Task Manager", SwingConstants.CENTER);
-        label.setFont(new Font("Helvetica Neue", Font.BOLD, 32));
+        label.setFont(new Font("Helvetica Neue", Font.BOLD, 28));
         label.setForeground(new Color(28, 28, 30));
         label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setBorder(BorderFactory.createEmptyBorder(10, 0, 10, 0));
         return label;
     }
     
@@ -102,7 +102,7 @@ public class LoginPanel extends JPanel
         
         // Username field
         formPanel.add(createFormField("Username", usernameField = createTextField()));
-        formPanel.add(Box.createVerticalStrut(20));
+        formPanel.add(Box.createVerticalStrut(15));
         
         // Password field
         formPanel.add(createFormField("Password", passwordField = createPasswordField()));
@@ -119,7 +119,7 @@ public class LoginPanel extends JPanel
         fieldPanel.setLayout(new BoxLayout(fieldPanel, BoxLayout.Y_AXIS));
         fieldPanel.setBackground(new Color(248, 248, 248));
         fieldPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
-        fieldPanel.setMaximumSize(new Dimension(300, 70));
+        fieldPanel.setMaximumSize(new Dimension(300, 65));
         
         JLabel label = new JLabel(labelText);
         label.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
@@ -129,76 +129,52 @@ public class LoginPanel extends JPanel
         field.setAlignmentX(Component.LEFT_ALIGNMENT);
         
         fieldPanel.add(label);
-        fieldPanel.add(Box.createVerticalStrut(8));
+        fieldPanel.add(Box.createVerticalStrut(6));
         fieldPanel.add(field);
         
         return fieldPanel;
     }
     
     /**
-     * Creates a styled text input field
+     * Creates a styled text field
      */
     private JTextField createTextField()
     {
         JTextField field = new JTextField();
-        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 16));
-        field.setMaximumSize(new Dimension(300, 40));
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
+        field.setMaximumSize(new Dimension(300, 36));
         field.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
-            BorderFactory.createEmptyBorder(10, 12, 10, 12)
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
         ));
         field.setBackground(Color.WHITE);
         return field;
     }
     
     /**
-     * Creates a styled password input field
+     * Creates a styled password field
      */
     private JPasswordField createPasswordField()
     {
         JPasswordField field = new JPasswordField();
-        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 16));
-        field.setMaximumSize(new Dimension(300, 40));
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
+        field.setMaximumSize(new Dimension(300, 36));
         field.setBorder(BorderFactory.createCompoundBorder(
             BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
-            BorderFactory.createEmptyBorder(10, 12, 10, 12)
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
         ));
         field.setBackground(Color.WHITE);
         return field;
     }
     
     /**
-     * Creates the primary Sign In button
+     * Creates the primary Sign In button with consistent theming
      */
     private JButton createSignInButton()
     {
         JButton button = new JButton("Sign In");
-        button.setFont(new Font("Helvetica Neue", Font.BOLD, 15));
-        button.setForeground(Color.WHITE);
-        button.setBackground(new Color(0, 122, 255));
-        button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(12, 40, 12, 40));
-        button.setAlignmentX(Component.CENTER_ALIGNMENT);
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
-        // Hover effect
-        button.addMouseListener(new java.awt.event.MouseAdapter()
-        {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt)
-            {
-                button.setBackground(new Color(0, 110, 235));
-            }
-            
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt)
-            {
-                button.setBackground(new Color(0, 122, 255));
-            }
-        });
-        
+        stylePrimaryButton(button);
         button.addActionListener(e -> attemptLogin());
-        
         return button;
     }
     
@@ -238,6 +214,52 @@ public class LoginPanel extends JPanel
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
         return button;
+    }
+    
+    /**
+     * Styles a primary button with consistent theming
+     */
+    private void stylePrimaryButton(JButton button)
+    {
+        button.setFont(new Font("Helvetica Neue", Font.BOLD, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(0, 122, 255));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 30, 10, 30));
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        // Hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                button.setBackground(new Color(0, 110, 235));
+            }
+            
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                button.setBackground(new Color(0, 122, 255));
+            }
+        });
+    }
+    
+    /**
+     * Styles a secondary button with consistent theming
+     */
+    private void styleSecondaryButton(JButton button)
+    {
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        button.setForeground(new Color(100, 100, 105));
+        button.setBackground(new Color(240, 240, 242));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
+            BorderFactory.createEmptyBorder(8, 20, 8, 20)
+        ));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
     
     /**
