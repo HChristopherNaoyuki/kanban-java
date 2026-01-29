@@ -5,7 +5,7 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Login interface optimized for 2160x1440 aspect ratio (3:2)
+ * Login interface optimized for 900x600 window
  * Features consistent button theming and clean layout
  */
 public class LoginPanel extends JPanel
@@ -29,7 +29,7 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Creates the main content panel optimized for 2160x1440 ratio
+     * Creates the main content panel optimized for 900x600 window
      */
     private JPanel createContentPanel()
     {
@@ -51,7 +51,7 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Creates centered content with proper spacing for 2160x1440
+     * Creates centered content with proper spacing for 900x600
      */
     private JPanel createCenteredContent()
     {
@@ -141,7 +141,7 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Creates a styled text field for 2160x1440 ratio
+     * Creates a styled text field for 900x600 window
      */
     private JTextField createTextField()
     {
@@ -157,7 +157,7 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Creates a styled password field for 2160x1440 ratio
+     * Creates a styled password field for 900x600 window
      */
     private JPasswordField createPasswordField()
     {
@@ -223,7 +223,7 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Styles a primary button with consistent theming for 2160x1440
+     * Styles a primary button with consistent theming
      */
     private void stylePrimaryButton(JButton button)
     {
@@ -252,7 +252,7 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Styles a secondary button with consistent theming for 2160x1440
+     * Styles a secondary button with consistent theming
      */
     private void styleSecondaryButton(JButton button)
     {

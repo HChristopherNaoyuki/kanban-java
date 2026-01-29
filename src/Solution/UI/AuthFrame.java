@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application window optimized for 2160x1440 aspect ratio (3:2)
- * Provides consistent navigation with Apple-inspired design
+ * Main application window with optimized window sizes
+ * Registration panel opens in full screen mode
  */
 public final class AuthFrame extends JFrame
 {
@@ -15,7 +15,7 @@ public final class AuthFrame extends JFrame
     private final TaskManager taskManager;
     
     /**
-     * Constructs the main application window with 2160x1440 aspect ratio
+     * Constructs the main application window
      */
     public AuthFrame()
     {
@@ -26,16 +26,15 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Initializes window properties with 2160x1440 aspect ratio
-     * Base size: 900x600 (3:2 aspect ratio)
+     * Initializes window properties with optimal sizing
      */
     private void initializeWindow()
     {
         setTitle("Task Manager");
         
-        // 2160x1440 aspect ratio (3:2) - scaled down to 900x600 for usability
+        // Set default size for login and task panels
         setSize(900, 600);
-        setMinimumSize(new Dimension(800, 533)); // Maintains 3:2 aspect ratio
+        setMinimumSize(new Dimension(800, 533));
         
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -63,6 +62,11 @@ public final class AuthFrame extends JFrame
      */
     public void showLoginPanel()
     {
+        // Reset to windowed mode
+        setExtendedState(JFrame.NORMAL);
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+        
         getContentPane().removeAll();
         add(new LoginPanel(this, authManager));
         revalidate();
@@ -70,10 +74,13 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Shows the registration panel for new account creation
+     * Shows the registration panel in full screen mode
      */
     public void showRegistrationPanel()
     {
+        // Set to full screen mode
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        
         getContentPane().removeAll();
         add(new RegistrationPanel(this, authManager));
         revalidate();
@@ -85,6 +92,11 @@ public final class AuthFrame extends JFrame
      */
     public void showTaskPanel()
     {
+        // Reset to windowed mode
+        setExtendedState(JFrame.NORMAL);
+        setSize(900, 600);
+        setLocationRelativeTo(null);
+        
         getContentPane().removeAll();
         add(new TaskPanel(this, taskManager, authManager));
         revalidate();

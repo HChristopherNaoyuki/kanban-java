@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Task management interface optimized for 2160x1440 aspect ratio (3:2)
+ * Task management interface optimized for 900x600 window
  * Features consistent button theming and efficient space usage
  */
 public class TaskPanel extends JPanel
@@ -31,7 +31,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Initializes all components for 2160x1440 layout
+     * Initializes all components for 900x600 layout
      */
     private void initializeComponents()
     {
@@ -41,7 +41,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Creates the header panel with user info for 2160x1440
+     * Creates the header panel with user info for 900x600
      */
     private JPanel createHeaderPanel()
     {
@@ -73,7 +73,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Creates the main content panel for 2160x1440
+     * Creates the main content panel for 900x600
      */
     private JPanel createContentPanel()
     {
@@ -93,7 +93,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Creates the task display text area for 2160x1440
+     * Creates the task display text area for 900x600
      */
     private JTextArea createTaskDisplayArea()
     {
@@ -113,7 +113,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Creates the footer panel with action buttons for 2160x1440
+     * Creates the footer panel with action buttons for 900x600
      */
     private JPanel createFooterPanel()
     {
@@ -167,7 +167,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Creates a tertiary button (text-only style) for 2160x1440
+     * Creates a tertiary button (text-only style) for 900x600
      */
     private JButton createTertiaryButton(String text)
     {
@@ -183,7 +183,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Styles a primary button with consistent theming for 2160x1440
+     * Styles a primary button with consistent theming for 900x600
      */
     private void stylePrimaryButton(JButton button)
     {
@@ -212,7 +212,7 @@ public class TaskPanel extends JPanel
     }
     
     /**
-     * Styles a secondary button with consistent theming for 2160x1440
+     * Styles a secondary button with consistent theming for 900x600
      */
     private void styleSecondaryButton(JButton button)
     {
