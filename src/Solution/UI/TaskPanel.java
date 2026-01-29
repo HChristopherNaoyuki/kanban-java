@@ -2,270 +2,317 @@ package Solution.UI;
 
 import Solution.Logic.AuthManager;
 import Solution.Logic.TaskManager;
-
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Main working screen of the application
- * Contains:
- * • Welcome header
- * • Task display area
- * • Action buttons (Add, View All, Logout)
+ * Main task management interface with Apple-like design
+ * Clean layout, intuitive controls, and consistent visual language
  */
 public class TaskPanel extends JPanel
 {
-    private final AuthFrame   parentFrame;
+    private final AuthFrame parentFrame;
     private final TaskManager taskManager;
     private final AuthManager authManager;
-    private JTextArea   taskDisplayArea = null;
-
+    private JTextArea taskDisplayArea;
+    
     public TaskPanel(AuthFrame frame, TaskManager taskManager, AuthManager authManager)
     {
-        this.parentFrame  = frame;
-        this.taskManager  = taskManager;
-        this.authManager  = authManager;
-
-        setLayout(new BorderLayout(0, 40));
-        setBorder(BorderFactory.createEmptyBorder(80, 80, 80, 80));
-        setBackground(new Color(250, 250, 252));
-
-        add(createWelcomeHeader(),     BorderLayout.NORTH);
-        add(createTaskDisplayScroll(), BorderLayout.CENTER);
-        add(createActionButtonsBar(),  BorderLayout.SOUTH);
+        this.parentFrame = frame;
+        this.taskManager = taskManager;
+        this.authManager = authManager;
+        
+        setLayout(new BorderLayout(0, 0));
+        setBackground(new Color(248, 248, 248));
+        
+        add(createHeaderPanel(), BorderLayout.NORTH);
+        add(createContentPanel(), BorderLayout.CENTER);
+        add(createFooterPanel(), BorderLayout.SOUTH);
     }
-
-    private JLabel createWelcomeHeader()
+    
+    private JPanel createHeaderPanel()
     {
-        String fullName = authManager.getStoredFirstName() + " " +
-                          authManager.getStoredLastName();
-
-        JLabel label = new JLabel("Welcome, " + fullName, SwingConstants.CENTER);
-        label.setFont(new Font("SF Pro Display", Font.PLAIN, 32));
-        label.setForeground(new Color(28, 28, 30));
-        label.setBorder(BorderFactory.createEmptyBorder(0, 0, 64, 0));
-        return label;
+        JPanel header = new JPanel(new BorderLayout());
+        header.setBackground(new Color(248, 248, 248));
+        header.setBorder(BorderFactory.createEmptyBorder(24, 32, 24, 32));
+        
+        // Welcome message
+        String fullName = authManager.getStoredFirstName() + " " + 
+                         authManager.getStoredLastName();
+        JLabel welcomeLabel = new JLabel("Welcome, " + fullName);
+        welcomeLabel.setFont(new Font("Helvetica Neue", Font.PLAIN, 22));
+        welcomeLabel.setForeground(new Color(28, 28, 28));
+        
+        // Logout button
+        JButton logoutButton = createTextButton("Logout");
+        logoutButton.addActionListener(e -> parentFrame.showLoginPanel());
+        
+        header.add(welcomeLabel, BorderLayout.WEST);
+        header.add(logoutButton, BorderLayout.EAST);
+        
+        return header;
     }
-
-    private JScrollPane createTaskDisplayScroll()
+    
+    private JPanel createContentPanel()
     {
+        JPanel content = new JPanel(new BorderLayout());
+        content.setBackground(new Color(248, 248, 248));
+        content.setBorder(BorderFactory.createEmptyBorder(0, 32, 0, 32));
+        
+        // Task display area
         taskDisplayArea = new JTextArea();
         taskDisplayArea.setEditable(false);
         taskDisplayArea.setLineWrap(true);
         taskDisplayArea.setWrapStyleWord(true);
-        taskDisplayArea.setFont(new Font("SF Mono", Font.PLAIN, 13));
+        taskDisplayArea.setFont(new Font("Monaco", Font.PLAIN, 12));
         taskDisplayArea.setBackground(Color.WHITE);
-        taskDisplayArea.setForeground(new Color(40, 40, 45));
-        taskDisplayArea.setBorder(BorderFactory.createMatteBorder(
-                1, 1, 1, 1, new Color(225, 225, 230)));
-
-        JScrollPane scroll = new JScrollPane(taskDisplayArea);
-        scroll.setBorder(BorderFactory.createEmptyBorder());
-        scroll.getVerticalScrollBar().setUnitIncrement(16);
-
-        return scroll;
+        taskDisplayArea.setForeground(new Color(50, 50, 50));
+        taskDisplayArea.setBorder(BorderFactory.createEmptyBorder(16, 16, 16, 16));
+        
+        JScrollPane scrollPane = new JScrollPane(taskDisplayArea);
+        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 220), 1));
+        scrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        
+        content.add(scrollPane, BorderLayout.CENTER);
+        
+        return content;
     }
-
-    private JPanel createActionButtonsBar()
+    
+    private JPanel createFooterPanel()
     {
-        JPanel panel = new JPanel(new FlowLayout(FlowLayout.CENTER, 40, 20));
-        panel.setOpaque(false);
-
-        String[] actions = {
-                "Add New Task",
-                "View All Tasks",
-                "Logout"
-        };
-
-        for (String action : actions)
+        JPanel footer = new JPanel(new FlowLayout(FlowLayout.CENTER, 16, 16));
+        footer.setBackground(new Color(248, 248, 248));
+        footer.setBorder(BorderFactory.createEmptyBorder(16, 32, 32, 32));
+        
+        // Action buttons
+        JButton addTaskButton = createPrimaryButton("Add Task");
+        addTaskButton.addActionListener(e -> showAddTaskDialog());
+        
+        JButton viewAllButton = createSecondaryButton("View All");
+        viewAllButton.addActionListener(e -> showAllTasks());
+        
+        JButton searchButton = createSecondaryButton("Search by Developer");
+        searchButton.addActionListener(e -> showSearchDialog());
+        
+        footer.add(addTaskButton);
+        footer.add(viewAllButton);
+        footer.add(searchButton);
+        
+        return footer;
+    }
+    
+    private JButton createPrimaryButton(String text)
+    {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(0, 122, 255));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 24, 10, 24));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        button.addMouseListener(new java.awt.event.MouseAdapter()
         {
-            JButton button = createFlatButton(action);
-            panel.add(button);
-
-            switch (action)
+            public void mouseEntered(java.awt.event.MouseEvent evt)
             {
-                case "Add New Task"   -> button.addActionListener(e -> showAddTaskDialog());
-                case "View All Tasks" -> button.addActionListener(e -> showAllTasks());
-                case "Logout"         -> button.addActionListener(e -> parentFrame.showLoginPanel());
+                button.setBackground(new Color(0, 110, 230));
             }
-        }
-
-        return panel;
+            
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                button.setBackground(new Color(0, 122, 255));
+            }
+        });
+        
+        return button;
     }
-
-    private JButton createFlatButton(String text)
+    
+    private JButton createSecondaryButton(String text)
     {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("SF Pro Text", Font.PLAIN, 15));
-        btn.setForeground(new Color(28, 28, 30));
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(14, 44, 14, 44));
-        btn.setBackground(new Color(238, 238, 245));
-        btn.setOpaque(true);
-        btn.setBorderPainted(false);
-        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        return btn;
+        JButton button = new JButton(text);
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+        button.setForeground(new Color(100, 100, 100));
+        button.setBackground(new Color(235, 235, 235));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        return button;
     }
-
-    // ─────────────────────────────────────────────────────────────
-    //                  User interaction methods
-    // ─────────────────────────────────────────────────────────────
-
+    
+    private JButton createTextButton(String text)
+    {
+        JButton button = new JButton(text);
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        button.setForeground(new Color(0, 122, 255));
+        button.setBorder(BorderFactory.createEmptyBorder(4, 8, 4, 8));
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        return button;
+    }
+    
     private void showAddTaskDialog()
     {
-        String taskName = JOptionPane.showInputDialog(this,
-                "Enter task name:", "New Task", JOptionPane.PLAIN_MESSAGE);
-
-        if (taskName == null || taskName.trim().isEmpty()) return;
-        taskName = taskName.trim();
-
-        String description = JOptionPane.showInputDialog(this,
-                "Enter description (max 50 chars):", "New Task",
-                JOptionPane.PLAIN_MESSAGE);
-
-        if (description == null) return;
-        description = description.trim();
-
-        if (description.length() > 50)
-        {
-            showError("Description must be 50 characters or less.");
-            return;
-        }
-
-        int numDevs = askNumberOfDevelopers();
-        if (numDevs < 1) return;
-
-        List<String> developers = askDeveloperNames(numDevs);
-        if (developers == null) return;
-
-        float duration = askDuration();
-        if (duration <= 0) return;
-
-        String status = askStatus();
-        if (status == null) return;
-
-        try
-        {
-            taskManager.addTask(taskName, description, developers, duration, status);
-            JOptionPane.showMessageDialog(this,
-                    "Task added successfully!",
-                    "Success",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-        catch (IllegalArgumentException ex)
-        {
-            showError(ex.getMessage());
-        }
-    }
-
-    private int askNumberOfDevelopers()
-    {
-        while (true)
-        {
-            String input = JOptionPane.showInputDialog(this,
-                    "Number of developers (1-5):", "New Task",
-                    JOptionPane.PLAIN_MESSAGE);
-
-            if (input == null) return -1;
-
-            try
-            {
-                int n = Integer.parseInt(input.trim());
-                if (n >= 1 && n <= 5) return n;
-                showWarning("Please enter number between 1 and 5.");
-            }
-            catch (NumberFormatException e)
-            {
-                showWarning("Please enter a valid number.");
-            }
-        }
-    }
-
-    private List<String> askDeveloperNames(int count)
-    {
-        List<String> names = new ArrayList<>();
-
-        for (int i = 1; i <= count; i++)
-        {
-            String name = JOptionPane.showInputDialog(this,
-                    "Developer #" + i + " name:", "New Task",
-                    JOptionPane.PLAIN_MESSAGE);
-
-            if (name == null) return null;
-            name = name.trim();
-            if (name.isEmpty())
-            {
-                showWarning("Developer name cannot be empty.");
-                return null;
-            }
-            names.add(name);
-        }
-        return names;
-    }
-
-    private float askDuration()
-    {
-        while (true)
-        {
-            String input = JOptionPane.showInputDialog(this,
-                    "Duration in hours (e.g. 4.5):", "New Task",
-                    JOptionPane.PLAIN_MESSAGE);
-
-            if (input == null) return -1;
-
-            try
-            {
-                float value = Float.parseFloat(input.trim());
-                if (value > 0) return value;
-                showWarning("Duration must be greater than zero.");
-            }
-            catch (NumberFormatException e)
-            {
-                showWarning("Please enter a valid number (e.g. 3.75)");
-            }
-        }
-    }
-
-    private String askStatus()
-    {
-        String[] options = {"To Do", "Doing", "Done"};
-
-        return (String) JOptionPane.showInputDialog(
-                this,
-                "Select task status:",
-                "Task Status",
-                JOptionPane.QUESTION_MESSAGE,
-                null,
-                options,
-                options[0]
+        // Simplified task addition - all in one dialog
+        JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(4, 4, 12, 4);
+        
+        // Task name
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        panel.add(new JLabel("Task Name:"), gbc);
+        gbc.gridx = 1;
+        JTextField nameField = new JTextField(20);
+        panel.add(nameField, gbc);
+        
+        // Description
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        panel.add(new JLabel("Description (≤50 chars):"), gbc);
+        gbc.gridx = 1;
+        JTextArea descArea = new JTextArea(3, 20);
+        descArea.setLineWrap(true);
+        descArea.setWrapStyleWord(true);
+        panel.add(new JScrollPane(descArea), gbc);
+        
+        // Developers
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        panel.add(new JLabel("Developers (comma-separated):"), gbc);
+        gbc.gridx = 1;
+        JTextField devField = new JTextField(20);
+        panel.add(devField, gbc);
+        
+        // Duration
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        panel.add(new JLabel("Duration (hours):"), gbc);
+        gbc.gridx = 1;
+        JTextField durationField = new JTextField(10);
+        panel.add(durationField, gbc);
+        
+        // Status
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        panel.add(new JLabel("Status:"), gbc);
+        gbc.gridx = 1;
+        String[] statusOptions = {"To Do", "Doing", "Done"};
+        JComboBox<String> statusCombo = new JComboBox<>(statusOptions);
+        panel.add(statusCombo, gbc);
+        
+        int result = JOptionPane.showConfirmDialog(
+            this, panel, "Add New Task", 
+            JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE
         );
+        
+        if (result == JOptionPane.OK_OPTION)
+        {
+            String taskName = nameField.getText().trim();
+            String description = descArea.getText().trim();
+            String developersStr = devField.getText().trim();
+            String durationStr = durationField.getText().trim();
+            String status = (String) statusCombo.getSelectedItem();
+            
+            // Validation
+            if (taskName.isEmpty() || description.isEmpty() || 
+                developersStr.isEmpty() || durationStr.isEmpty())
+            {
+                showMessage("All fields are required", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            if (description.length() > 50)
+            {
+                showMessage("Description must be 50 characters or less", 
+                           "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Parse developers
+            String[] devArray = developersStr.split(",");
+            List<String> developers = new ArrayList<>();
+            for (String dev : devArray)
+            {
+                String trimmedDev = dev.trim();
+                if (!trimmedDev.isEmpty())
+                {
+                    developers.add(trimmedDev);
+                }
+            }
+            
+            if (developers.size() < 1 || developers.size() > 5)
+            {
+                showMessage("Must have 1-5 developers", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            
+            // Parse duration
+            try
+            {
+                float duration = Float.parseFloat(durationStr);
+                if (duration <= 0)
+                {
+                    showMessage("Duration must be positive", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                
+                taskManager.addTask(taskName, description, developers, duration, status);
+                showMessage("Task added successfully", "Success", JOptionPane.INFORMATION_MESSAGE);
+                showAllTasks();
+            }
+            catch (NumberFormatException e)
+            {
+                showMessage("Invalid duration format", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            catch (IllegalArgumentException e)
+            {
+                showMessage(e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }
-
+    
     private void showAllTasks()
     {
         String content = taskManager.getAllTasks();
         taskDisplayArea.setText(
-                content.trim().isEmpty() ?
-                        "No tasks have been added yet." :
-                        content
+            content.trim().isEmpty() ? 
+            "No tasks have been added yet." : 
+            content
         );
     }
-
-    private void showError(String message)
+    
+    private void showSearchDialog()
     {
-        JOptionPane.showMessageDialog(this,
-                message,
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+        String developer = JOptionPane.showInputDialog(
+            this, 
+            "Enter developer name:", 
+            "Search Tasks", 
+            JOptionPane.QUESTION_MESSAGE
+        );
+        
+        if (developer != null && !developer.trim().isEmpty())
+        {
+            try
+            {
+                String content = taskManager.getTasksByDeveloper(developer.trim());
+                taskDisplayArea.setText(content);
+            }
+            catch (IllegalArgumentException e)
+            {
+                showMessage(e.getMessage(), "Search Results", JOptionPane.INFORMATION_MESSAGE);
+            }
+        }
     }
-
-    private void showWarning(String message)
+    
+    private void showMessage(String message, String title, int messageType)
     {
-        JOptionPane.showMessageDialog(this,
-                message,
-                "Warning",
-                JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this, message, title, messageType);
     }
 }

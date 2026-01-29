@@ -1,151 +1,178 @@
 package Solution.UI;
 
 import Solution.Logic.AuthManager;
-
 import javax.swing.*;
 import java.awt.*;
 
 /**
- * Minimalist login panel compatible with Java 8
- * - Clear labels above input fields
- * - Underline-style text fields (bottom border only)
- * - Flat buttons with generous padding
- * - High vertical whitespace
+ * Minimalist login interface with Apple design principles
+ * Clean layout, ample whitespace, subtle interactions
  */
 public class LoginPanel extends JPanel
 {
-    private final AuthFrame      frame;
-    private final AuthManager    authManager;
-    private final JTextField     usernameField;
+    private final AuthFrame frame;
+    private final AuthManager authManager;
+    private final JTextField usernameField;
     private final JPasswordField passwordField;
-
+    
     public LoginPanel(AuthFrame frame, AuthManager authManager)
     {
-        this.frame       = frame;
+        this.frame = frame;
         this.authManager = authManager;
-
-        setLayout(new BorderLayout());
-        setBorder(BorderFactory.createEmptyBorder(120, 80, 120, 80));
-        setBackground(new Color(250, 250, 252));
-
-        Box vertical = Box.createVerticalBox();
-        vertical.setAlignmentX(CENTER_ALIGNMENT);
-
-        addTitle(vertical);
-        vertical.add(Box.createVerticalStrut(24));
-
-        addLabeledField(vertical, "USERNAME:", usernameField = new JTextField(26));
-        vertical.add(Box.createVerticalStrut(36));
-
-        addLabeledField(vertical, "PASSWORD:", passwordField = new JPasswordField(26));
-        vertical.add(Box.createVerticalStrut(64));
-
-        addButtonRow(vertical);
-
-        JPanel centeringPanel = new JPanel(new GridBagLayout());
-        centeringPanel.setOpaque(false);
-        centeringPanel.add(vertical);
-
-        add(centeringPanel, BorderLayout.CENTER);
-    }
-
-    private void addTitle(Box container)
-    {
+        
+        setLayout(new GridBagLayout());
+        setBackground(new Color(248, 248, 248));
+        
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.insets = new Insets(4, 40, 4, 40);
+        
+        JPanel contentPanel = new JPanel();
+        contentPanel.setLayout(new BoxLayout(contentPanel, BoxLayout.Y_AXIS));
+        contentPanel.setBackground(new Color(248, 248, 248));
+        contentPanel.setBorder(BorderFactory.createEmptyBorder(40, 0, 40, 0));
+        
+        // Title
         JLabel title = new JLabel("Sign In", SwingConstants.CENTER);
-        title.setFont(new Font("Helvetica Neue", Font.PLAIN, 30));
-        title.setForeground(new Color(28, 28, 30));
-        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 60, 0));
-        container.add(title);
+        title.setFont(new Font("Helvetica Neue", Font.PLAIN, 32));
+        title.setForeground(new Color(28, 28, 28));
+        title.setAlignmentX(CENTER_ALIGNMENT);
+        title.setBorder(BorderFactory.createEmptyBorder(0, 0, 48, 0));
+        contentPanel.add(title);
+        
+        // Username field
+        JLabel userLabel = new JLabel("Username");
+        userLabel.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        userLabel.setForeground(new Color(100, 100, 100));
+        userLabel.setAlignmentX(LEFT_ALIGNMENT);
+        contentPanel.add(userLabel);
+        contentPanel.add(Box.createVerticalStrut(4));
+        
+        usernameField = new JTextField(24);
+        styleTextField(usernameField);
+        usernameField.setAlignmentX(LEFT_ALIGNMENT);
+        contentPanel.add(usernameField);
+        contentPanel.add(Box.createVerticalStrut(20));
+        
+        // Password field
+        JLabel passLabel = new JLabel("Password");
+        passLabel.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        passLabel.setForeground(new Color(100, 100, 100));
+        passLabel.setAlignmentX(LEFT_ALIGNMENT);
+        contentPanel.add(passLabel);
+        contentPanel.add(Box.createVerticalStrut(4));
+        
+        passwordField = new JPasswordField(24);
+        styleTextField(passwordField);
+        passwordField.setAlignmentX(LEFT_ALIGNMENT);
+        contentPanel.add(passwordField);
+        contentPanel.add(Box.createVerticalStrut(32));
+        
+        // Sign In button
+        JButton signInButton = createPrimaryButton("Sign In");
+        signInButton.setAlignmentX(LEFT_ALIGNMENT);
+        signInButton.addActionListener(e -> attemptLogin());
+        contentPanel.add(signInButton);
+        contentPanel.add(Box.createVerticalStrut(16));
+        
+        // Registration link
+        JPanel linkPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 0, 0));
+        linkPanel.setBackground(new Color(248, 248, 248));
+        JLabel question = new JLabel("Don't have an account? ");
+        question.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        question.setForeground(new Color(100, 100, 100));
+        
+        JButton registerLink = new JButton("Register");
+        styleLinkButton(registerLink);
+        registerLink.addActionListener(e -> frame.showRegistrationPanel());
+        
+        linkPanel.add(question);
+        linkPanel.add(registerLink);
+        linkPanel.setAlignmentX(LEFT_ALIGNMENT);
+        contentPanel.add(linkPanel);
+        
+        add(contentPanel);
     }
-
-    private void addLabeledField(Box container, String labelText, JComponent field)
+    
+    private void styleTextField(JTextField field)
     {
-        container.add(createLabeledInput(labelText, field));
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 16));
+        field.setForeground(new Color(28, 28, 28));
+        field.setBorder(BorderFactory.createCompoundBorder(
+            BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(200, 200, 200)),
+            BorderFactory.createEmptyBorder(8, 8, 8, 8)
+        ));
+        field.setBackground(new Color(248, 248, 248));
+        field.setMaximumSize(new Dimension(400, 40));
     }
-
-    private JPanel createLabeledInput(String labelText, JComponent field)
+    
+    private JButton createPrimaryButton(String text)
     {
-        JPanel panel = new JPanel(new BorderLayout(0, 8));
-        panel.setOpaque(false);
-
-        JLabel label = new JLabel(labelText);
-        label.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
-        label.setForeground(new Color(70, 70, 75));
-        panel.add(label, BorderLayout.NORTH);
-
-        styleTextComponent(field);
-        panel.add(field, BorderLayout.CENTER);
-
-        return panel;
+        JButton button = new JButton(text);
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
+        button.setForeground(Color.WHITE);
+        button.setBackground(new Color(0, 122, 255));
+        button.setFocusPainted(false);
+        button.setBorder(BorderFactory.createEmptyBorder(12, 24, 12, 24));
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        
+        // Simple hover effect
+        button.addMouseListener(new java.awt.event.MouseAdapter()
+        {
+            public void mouseEntered(java.awt.event.MouseEvent evt)
+            {
+                button.setBackground(new Color(0, 110, 230));
+            }
+            
+            public void mouseExited(java.awt.event.MouseEvent evt)
+            {
+                button.setBackground(new Color(0, 122, 255));
+            }
+        });
+        
+        return button;
     }
-
-    private void styleTextComponent(JComponent comp)
+    
+    private void styleLinkButton(JButton button)
     {
-        comp.setFont(new Font("Helvetica Neue", Font.PLAIN, 17));
-        comp.setForeground(new Color(44, 44, 46));
-
-        // Java 8 compatible: only bottom border, no setCaretColor()
-        comp.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(190, 190, 200)));
-
-        comp.setBackground(new Color(250, 250, 252));
-        comp.setOpaque(false);
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        button.setForeground(new Color(0, 122, 255));
+        button.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
-
-    private void addButtonRow(Box container)
-    {
-        JPanel buttons = new JPanel(new FlowLayout(FlowLayout.CENTER, 50, 0));
-        buttons.setOpaque(false);
-
-        JButton signInBtn = createFlatButton("Sign In");
-        signInBtn.addActionListener(e -> attemptLogin());
-        buttons.add(signInBtn);
-
-        JButton registerBtn = createFlatButton("Register");
-        registerBtn.addActionListener(e -> frame.showRegistrationPanel());
-        buttons.add(registerBtn);
-
-        container.add(buttons);
-    }
-
-    private JButton createFlatButton(String text)
-    {
-        JButton btn = new JButton(text);
-        btn.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
-        btn.setForeground(new Color(28, 28, 30));
-        btn.setFocusPainted(false);
-        btn.setBorder(BorderFactory.createEmptyBorder(14, 48, 14, 48));
-        btn.setBackground(new Color(238, 238, 245));
-        btn.setOpaque(true);
-        btn.setBorderPainted(false);
-        btn.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        return btn;
-    }
-
+    
     private void attemptLogin()
     {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
-
+        
         if (username.isEmpty() || password.isEmpty())
         {
-            JOptionPane.showMessageDialog(this,
-                    "Please enter both username and password.",
-                    "Required Fields",
-                    JOptionPane.WARNING_MESSAGE);
+            showMessage("Please enter both username and password", 
+                       "Required Fields", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
+        
         try
         {
-            authManager.loginUser(username, password);
-            frame.showTaskPanel();
+            boolean success = authManager.loginUser(username, password);
+            if (success)
+            {
+                frame.showTaskPanel();
+            }
         }
         catch (IllegalArgumentException ex)
         {
-            JOptionPane.showMessageDialog(this,
-                    ex.getMessage(),
-                    "Login Failed",
-                    JOptionPane.ERROR_MESSAGE);
+            showMessage("Invalid username or password", 
+                       "Login Failed", JOptionPane.ERROR_MESSAGE);
         }
+    }
+    
+    private void showMessage(String message, String title, int messageType)
+    {
+        JOptionPane.showMessageDialog(this, message, title, messageType);
     }
 }
