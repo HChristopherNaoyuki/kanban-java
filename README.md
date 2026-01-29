@@ -1,110 +1,155 @@
-# Task Manager: Kanban
+# Task Management System
 
-A lightweight desktop application for task management with user authentication and basic Kanban-style tracking.
-
-## Disclaimer
-
-**DISCLAIMER**  
-UNDER NO CIRCUMSTANCES SHOULD IMAGES OR EMOJIS BE INCLUDED DIRECTLY IN THE README FILE. 
-ALL VISUAL MEDIA, INCLUDING SCREENSHOTS AND IMAGES OF THE APPLICATION, MUST BE STORED IN 
-A DEDICATED FOLDER WITHIN THE PROJECT DIRECTORY. THIS FOLDER SHOULD BE CLEARLY STRUCTURED 
-AND NAMED ACCORDINGLY TO INDICATE THAT IT CONTAINS ALL VISUAL CONTENT RELATED TO THE 
-APPLICATION (FOR EXAMPLE, A FOLDER NAMED `images`, `screenshots`, or `media`).
-
-I AM NOT LIABLE OR RESPONSIBLE FOR ANY MALFUNCTIONS, DEFECTS, OR ISSUES THAT MAY OCCUR AS A 
-RESULT OF COPYING, MODIFYING, OR USING THIS SOFTWARE. IF YOU ENCOUNTER ANY PROBLEMS OR ERRORS, 
-PLEASE DO NOT ATTEMPT TO FIX THEM SILENTLY OR OUTSIDE THE PROJECT. INSTEAD, KINDLY SUBMIT A 
-PULL REQUEST OR OPEN AN ISSUE ON THE CORRESPONDING GITHUB REPOSITORY, SO THAT IT CAN BE ADDRESSED 
-APPROPRIATELY BY THE MAINTAINERS OR CONTRIBUTORS.
+A professional Java Swing application for managing development tasks with team collaboration features. 
+This system provides secure user authentication and comprehensive task management capabilities.
 
 ## Table of Contents
 
-- [Overview](#overview)
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Important Notes](#important-notes)
-- [Contributing](#contributing)
-- [License](#license)
-
-## Overview
-
-This application is a simple task management system built with Java Swing.  
-It allows users to register, log in, create tasks, assign them to developers, 
-track status, and generate basic reports — all while maintaining a clean, minimalist interface.
-
-Repository:  
-https://github.com/HChristopherNaoyuki/kanban-java.git
+1.  [Features](#features)
+2.  [System Requirements](#system-requirements)
+3.  [Installation](#installation)
+4.  [Quick Start](#quick-start)
+5.  [User Guide](#user-guide)
+    1.  [Account Registration](#account-registration)
+    2.  [User Authentication](#user-authentication)
+    3.  [Task Management](#task-management)
+    4.  [Task Operations](#task-operations)
+6.  [Technical Architecture](#technical-architecture)
+7.  [Project Structure](#project-structure)
+8.  [Validation Rules](#validation-rules)
+9.  [Development Guide](#development-guide)
+10. [Contributing](#contributing)
+11. [License](#license)
 
 ## Features
 
-- User registration with input validation (username format, password complexity)
-- Secure login
-- Task creation including:
-  - Task name
-  - Description (limited to 50 characters)
-  - Assignment to 1–5 developers
-  - Estimated/completed duration in hours
-  - Status selection (To Do, Doing, Done)
-- List all tasks
-- Filter tasks by developer
-- Show task with longest duration
-- Logout functionality
-- Consistent minimalist user interface
+-   **Secure Authentication**: Username and password validation with security requirements
+-   **Team Task Management**: Support for multiple developers per task (1-5 team members)
+-   **Task Status Tracking**: Kanban-style workflow with To Do, Doing, Done statuses
+-   **Professional UI**: Clean, Apple-inspired interface with responsive design
+-   **Comprehensive Search**: Filter tasks by developer or find the longest task
+-   **Data Validation**: Strict input validation for data integrity
+-   **Automatic Task ID Generation**: Intelligent ID creation based on task details
 
-## Technology Stack
+## System Requirements
 
-| Layer             | Technology              | Version / Note                     |
-|-------------------|-------------------------|------------------------------------|
-| Language          | Java                    | 8+ (Java 8 compatible)             |
-| GUI Framework     | Swing / AWT             | Part of Java SE                    |
-| Build system      | None (manual) / Maven recommended | —                                  |
-| Data storage      | In-memory               | No persistence (current version)   |
-
-## Prerequisites
-
-- Java Development Kit (JDK) 8 or higher
-- Git (recommended for cloning the repository)
-- Command line or Java IDE (IntelliJ IDEA, Eclipse, NetBeans, VS Code + Java extensions)
+-   **Java Development Kit (JDK)**: Version 8 or higher
+-   **Operating System**: Windows, macOS, or Linux
+-   **Memory**: Minimum 512 MB RAM
+-   **Storage**: Minimum 50 MB free disk space
 
 ## Installation
 
-1. Clone the repository
+### Method 1: Using Git Clone
 
-   ```bash
-   git clone https://github.com/HChristopherNaoyuki/kanban-java.git
-   cd kanban-java
-   ```
+1.  Clone the repository:
+    ```bash
+    git clone https://github.com/HChristopherNaoyuki/kanban-java.git
+    ```
+2.  Navigate to the project directory:
+    ```bash
+    cd kanban-java
+    ```
+3.  Compile the application:
+    ```bash
+    javac -d bin src/Solution/*.java src/Solution/UI/*.java src/Solution/Logic/*.java
+    ```
 
-2. Compile the source code
+### Method 2: Using an IDE
 
-   ```bash
-   # Option A – manual compilation
-   mkdir -p bin
-   javac -d bin src/Solution/**/*.java
-   ```
+1.  Open your preferred Java IDE (IntelliJ IDEA, Eclipse, or NetBeans)
+2.  Import the project from the cloned repository
+3.  The IDE should automatically detect the project structure
+4.  Build the project using the IDE's build tools
 
-   or use your IDE to build the project.
+## Quick Start
 
-3. Run the application
+1.  After compilation, run the application:
+    ```bash
+    java -cp bin Solution.Solution
+    ```
+2.  Create a new account following the registration guidelines
+3.  Log in with your credentials
+4.  Start adding and managing tasks immediately
 
-   ```bash
-   java -cp bin Solution.UI.AuthFrame
-   ```
+## User Guide
 
-## Usage
+### Account Registration
 
-1. Start the application
-2. Register a new account or sign in
-3. After login:
-   - Click **Add New Task** to create tasks
-   - Click **View All Tasks** to see the full list
-   - Click **Logout** to return to the login screen
+1.  Launch the application and click "Create Account"
+2.  Fill in all required personal information:
+    -   First and Last Name (required for profile)
+    -   Username (must contain `_` and be ≤5 characters)
+    -   Password (8+ characters with uppercase, number, special character)
+3.  Review the detailed requirements panel for guidance
+4.  Click "Create Account" to complete registration
 
-All critical inputs are validated. Appropriate error messages are shown when rules are violated.
+### User Authentication
+
+1.  Enter your registered username and password
+2.  Click "Sign In" to access the task management system
+3.  Use "Sign Out" to securely exit your session
+4.  Return to login at any time to switch accounts
+
+### Task Management
+
+The task management interface provides:
+
+-   **Welcome Display**: Shows your registered name
+-   **Task List Area**: Displays all tasks in readable format
+-   **Action Buttons**: Primary controls for task operations
+-   **Search Functions**: Quick access to filtering tools
+
+### Task Operations
+
+#### Adding a New Task
+
+1.  Click "Add Task" in the main interface
+2.  Provide task details in the dialog sequence:
+    -   Task Name: Descriptive title for the task
+    -   Description: Detailed explanation (50 characters maximum)
+    -   Number of Developers: Select 1-5 team members
+    -   Developer Names: Enter each developer's name
+    -   Duration: Estimated hours (positive decimal number)
+    -   Status: Select To Do, Doing, or Done
+3.  The system validates all inputs and creates the task
+
+#### Viewing Tasks
+
+-   **View All**: Click "View All" to display every task in the system
+-   **Task Details**: Each task shows name, description, developers, duration, status, and ID
+-   **Format**: Tasks display in a clean, formatted text area for easy reading
+
+#### Searching Tasks
+
+-   **By Developer**: Click "Search by Developer" and enter a name to see assigned tasks
+-   **Longest Task**: Click "Longest Task" to identify the most time-consuming task
+-   **Results**: Search results appear in the main display area
+
+#### Task ID Generation
+
+The system automatically generates task IDs using this format:
+
+```
+[First 2 letters of task name]:[Last 3 letters of first developer's name]
+```
+
+Example: Task "Database" with developer "Christopher" generates "DA:HER"
+
+## Technical Architecture
+
+The application follows Model-View-Controller (MVC) architecture:
+
+-   **Model**: `AuthManager`, `TaskManager`, `Validator` classes handle business logic
+-   **View**: Swing-based UI components provide the user interface
+-   **Controller**: `AuthFrame` coordinates between views and models
+
+### Key Design Principles
+
+-   **Separation of Concerns**: Clear division between UI, logic, and validation
+-   **Error Handling**: Comprehensive exception handling with user-friendly messages
+-   **Thread Safety**: Proper Swing thread management for responsive UI
+-   **Memory Efficiency**: Optimized data structures and resource management
 
 ## Project Structure
 
@@ -112,40 +157,95 @@ All critical inputs are validated. Appropriate error messages are shown when rul
 kanban-java/
 ├── src/
 │   └── Solution/
+│       ├── Solution.java             # Main application entry point
 │       ├── Logic/
-│       │   ├── AuthManager.java
-│       │   ├── TaskManager.java
-│       │   └── Validator.java      (optional helper class)
+│       │   ├── AuthManager.java      # User authentication and registration
+│       │   ├── TaskManager.java      # Task creation and management
+│       │   └── Validator.java        # Input validation utilities
 │       └── UI/
-│           ├── AuthFrame.java
-│           ├── LoginPanel.java
-│           ├── RegistrationPanel.java
-│           └── TaskPanel.java
-└── README.md
+│           ├── AuthFrame.java        # Main window controller
+│           ├── RoundedButton.java    # Custom rounded button component
+│           ├── LoginPanel.java       # User authentication interface
+│           ├── RegistrationPanel.java # User registration interface
+│           └── TaskPanel.java        # Task management interface
+└── README.md                         # This documentation file
 ```
 
-**Important:** No images should appear directly in this README file. All screenshots and visual assets must be stored in the `images/` folder (or equivalent).
+## Validation Rules
 
-## Important Notes
+### Username Requirements
 
-- The current version stores all data in memory → data is lost when the application closes.
-- Passwords are stored in plain text (for demonstration purposes only — not suitable for production).
-- No encryption, no database, no file persistence — intended as an educational / academic project.
-- Interface styling aims for a clean, modern desktop look (macOS-inspired minimalism).
+-   Must contain at least one underscore character (`_`)
+-   Maximum length: 5 characters
+-   No spaces allowed
+-   Case-sensitive matching
+-   Cannot be changed after account creation
+
+### Password Security
+
+-   Minimum length: 8 characters
+-   At least one uppercase letter (A-Z)
+-   At least one digit (0-9)
+-   At least one special character (!@#$%^&*()_+-=[]{}|;:,.<>?)
+-   Avoid common passwords and personal information
+
+### Task Validation
+
+-   **Description**: Maximum 50 characters
+-   **Developers**: 1-5 developers per task
+-   **Duration**: Positive decimal number
+-   **Status**: Must be "To Do", "Doing", or "Done"
+
+## Development Guide
+
+### Code Style
+
+-   **Brace Style**: Allman (BSD) style with opening braces on new lines
+-   **Naming Conventions**: camelCase for variables, PascalCase for classes
+-   **Comments**: Comprehensive JavaDoc comments for all public methods
+-   **Indentation**: 4 spaces (no tabs)
+
+### Building from Source
+
+1.  Ensure JDK 8+ is installed and configured
+2.  Clone the repository
+3.  Compile all source files:
+    ```bash
+    javac -d bin src/Solution/*.java src/Solution/UI/*.java src/Solution/Logic/*.java
+    ```
+
+### Running Tests
+
+The application includes comprehensive validation testing through user interface interactions. Test scenarios include:
+
+-   User registration with valid and invalid credentials
+-   Task creation with boundary cases
+-   Search functionality with various inputs
+-   Error handling for invalid operations
+
+### Extending the Application
+
+To add new features:
+
+1.  Follow existing patterns in the codebase
+2.  Maintain separation between UI, logic, and validation
+3.  Add appropriate validation for new inputs
+4.  Update documentation to reflect changes
+5.  Test thoroughly before deployment
 
 ## Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/add-persistence`)
-3. Commit your changes (`git commit -m "Add file-based task persistence"`)
-4. Push to your fork (`git push origin feature/add-persistence`)
-5. Open a Pull Request against the main repository
+Contributions to improve the Task Management System are welcome. Please follow these guidelines:
 
-Bug reports, feature suggestions, documentation improvements, and code enhancements are welcome via Issues or Pull Requests.
+1.  Fork the repository
+2.  Create a feature branch for your changes
+3.  Follow the existing code style and conventions
+4.  Add appropriate documentation for new features
+5.  Test your changes thoroughly
+6.  Submit a pull request with a clear description
 
 ## License
 
-This project is provided as-is for educational and demonstration purposes.  
-No warranty is provided. Use at your own risk.
+This project is available for educational and demonstration purposes. Please contact the repository owner for licensing information specific to your use case.
 
 ---
