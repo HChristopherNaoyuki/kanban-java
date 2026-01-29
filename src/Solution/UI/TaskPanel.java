@@ -2,10 +2,12 @@ package Solution.UI;
 
 import Solution.Logic.AuthManager;
 import Solution.Logic.TaskManager;
+
 import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import javax.swing.border.LineBorder;
 
 /**
  * Task management interface optimized for 900x600 window
@@ -17,19 +19,19 @@ public class TaskPanel extends JPanel
     private final TaskManager taskManager;
     private final AuthManager authManager;
     private JTextArea taskDisplayArea;
-    
+
     public TaskPanel(AuthFrame frame, TaskManager taskManager, AuthManager authManager)
     {
         this.parentFrame = frame;
         this.taskManager = taskManager;
         this.authManager = authManager;
-        
+
         setLayout(new BorderLayout());
         setBackground(new Color(248, 248, 248));
-        
+
         initializeComponents();
     }
-    
+
     /**
      * Initializes all components for 900x600 layout
      */
@@ -39,7 +41,7 @@ public class TaskPanel extends JPanel
         add(createContentPanel(), BorderLayout.CENTER);
         add(createFooterPanel(), BorderLayout.SOUTH);
     }
-    
+
     /**
      * Creates the header panel with user info for 900x600
      */
@@ -51,27 +53,27 @@ public class TaskPanel extends JPanel
             BorderFactory.createMatteBorder(0, 0, 1, 0, new Color(220, 220, 225)),
             BorderFactory.createEmptyBorder(20, 30, 20, 30)
         ));
-        
+
         // Welcome message
         String firstName = authManager.getStoredFirstName();
         String lastName = authManager.getStoredLastName();
         String fullName = firstName + " " + lastName;
-        
+
         JLabel welcomeLabel = new JLabel("Welcome, " + fullName);
         welcomeLabel.setFont(new Font("Helvetica Neue", Font.BOLD, 24));
         welcomeLabel.setForeground(new Color(28, 28, 30));
-        
+
         // Sign Out button with consistent theming
-        JButton logoutButton = new JButton("Sign Out");
+        RoundedButton logoutButton = new RoundedButton("Sign Out");
         styleSecondaryButton(logoutButton);
         logoutButton.addActionListener(e -> parentFrame.showLoginPanel());
-        
+
         header.add(welcomeLabel, BorderLayout.WEST);
         header.add(logoutButton, BorderLayout.EAST);
-        
+
         return header;
     }
-    
+
     /**
      * Creates the main content panel for 900x600
      */
@@ -80,18 +82,18 @@ public class TaskPanel extends JPanel
         JPanel content = new JPanel(new BorderLayout());
         content.setBackground(new Color(248, 248, 248));
         content.setBorder(BorderFactory.createEmptyBorder(25, 30, 25, 30));
-        
+
         // Task display area
         taskDisplayArea = createTaskDisplayArea();
         JScrollPane scrollPane = new JScrollPane(taskDisplayArea);
-        scrollPane.setBorder(BorderFactory.createLineBorder(new Color(220, 220, 225), 1));
+        scrollPane.setBorder(new LineBorder(new Color(220, 220, 225), 1, true));
         scrollPane.getVerticalScrollBar().setUnitIncrement(16);
-        
+
         content.add(scrollPane, BorderLayout.CENTER);
-        
+
         return content;
     }
-    
+
     /**
      * Creates the task display text area for 900x600
      */
@@ -105,13 +107,13 @@ public class TaskPanel extends JPanel
         area.setBackground(Color.WHITE);
         area.setForeground(new Color(50, 50, 55));
         area.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        
+
         // Set initial text
         area.setText("No tasks available. Add your first task to get started.");
-        
+
         return area;
     }
-    
+
     /**
      * Creates the footer panel with action buttons for 900x600
      */
@@ -124,48 +126,48 @@ public class TaskPanel extends JPanel
             BorderFactory.createMatteBorder(1, 0, 0, 0, new Color(220, 220, 225)),
             BorderFactory.createEmptyBorder(25, 30, 25, 30)
         ));
-        
+
         // Primary action buttons
         JPanel primaryPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 20, 0));
         primaryPanel.setBackground(new Color(248, 248, 248));
-        
-        JButton addTaskButton = new JButton("Add Task");
+
+        RoundedButton addTaskButton = new RoundedButton("Add Task");
         stylePrimaryButton(addTaskButton);
         addTaskButton.addActionListener(e -> showAddTaskDialog());
-        
-        JButton viewAllButton = new JButton("View All");
+
+        RoundedButton viewAllButton = new RoundedButton("View All");
         styleSecondaryButton(viewAllButton);
         viewAllButton.addActionListener(e -> showAllTasks());
-        
+
         primaryPanel.add(addTaskButton);
         primaryPanel.add(viewAllButton);
-        
+
         // Divider
         JSeparator divider = new JSeparator(JSeparator.HORIZONTAL);
         divider.setForeground(new Color(220, 220, 225));
         divider.setMaximumSize(new Dimension(800, 1));
         divider.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
-        
+
         // Secondary action buttons
         JPanel secondaryPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 15, 0));
         secondaryPanel.setBackground(new Color(248, 248, 248));
-        
+
         JButton searchButton = createTertiaryButton("Search by Developer");
         searchButton.addActionListener(e -> showSearchDialog());
-        
+
         JButton longestButton = createTertiaryButton("Longest Task");
         longestButton.addActionListener(e -> showLongestTask());
-        
+
         secondaryPanel.add(searchButton);
         secondaryPanel.add(longestButton);
-        
+
         footer.add(primaryPanel);
         footer.add(divider);
         footer.add(secondaryPanel);
-        
+
         return footer;
     }
-    
+
     /**
      * Creates a tertiary button (text-only style) for 900x600
      */
@@ -178,10 +180,10 @@ public class TaskPanel extends JPanel
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
+
         return button;
     }
-    
+
     /**
      * Styles a primary button with consistent theming for 900x600
      */
@@ -190,10 +192,9 @@ public class TaskPanel extends JPanel
         button.setFont(new Font("Helvetica Neue", Font.BOLD, 16));
         button.setForeground(Color.WHITE);
         button.setBackground(new Color(0, 122, 255));
-        button.setFocusPainted(false);
         button.setBorder(BorderFactory.createEmptyBorder(14, 35, 14, 35));
-        button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
-        
+        button.setBorderPainted(false);  // No border for primary buttons
+
         // Hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter()
         {
@@ -202,7 +203,7 @@ public class TaskPanel extends JPanel
             {
                 button.setBackground(new Color(0, 110, 235));
             }
-            
+
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt)
             {
@@ -210,23 +211,23 @@ public class TaskPanel extends JPanel
             }
         });
     }
-    
+
     /**
-     * Styles a secondary button with consistent theming for 900x600
+     * Styles a secondary button with consistent theming for 900x600 with soft edges
      */
     private void styleSecondaryButton(JButton button)
     {
         button.setFont(new Font("Helvetica Neue", Font.PLAIN, 15));
         button.setForeground(new Color(100, 100, 105));
         button.setBackground(new Color(240, 240, 242));
-        button.setFocusPainted(false);
         button.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createLineBorder(new Color(210, 210, 215), 1),
+            new LineBorder(new Color(210, 210, 215), 1, true),
             BorderFactory.createEmptyBorder(12, 30, 12, 30)
         ));
+
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
     }
-    
+
     /**
      * Shows dialog for adding a new task
      */
@@ -239,14 +240,14 @@ public class TaskPanel extends JPanel
             "New Task",
             JOptionPane.PLAIN_MESSAGE
         );
-        
+
         if (taskName == null || taskName.trim().isEmpty())
         {
             return;
         }
-        
+
         taskName = taskName.trim();
-        
+
         // Description
         String description = JOptionPane.showInputDialog(
             this,
@@ -254,49 +255,49 @@ public class TaskPanel extends JPanel
             "Task Description",
             JOptionPane.PLAIN_MESSAGE
         );
-        
+
         if (description == null)
         {
             return;
         }
-        
+
         description = description.trim();
-        
+
         if (description.length() > 50)
         {
-            showMessage("Description must be 50 characters or less.", 
+            showMessage("Description must be 50 characters or less.",
                        "Invalid Description", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        
+
         // Number of developers
         int numDevs = askNumberOfDevelopers();
         if (numDevs < 1)
         {
             return;
         }
-        
+
         // Developer names
         List<String> developers = askDeveloperNames(numDevs);
         if (developers == null)
         {
             return;
         }
-        
+
         // Duration
         float duration = askDuration();
         if (duration <= 0)
         {
             return;
         }
-        
+
         // Status
         String status = askStatus();
         if (status == null)
         {
             return;
         }
-        
+
         try
         {
             taskManager.addTask(taskName, description, developers, duration, status);
@@ -308,7 +309,7 @@ public class TaskPanel extends JPanel
             showMessage(ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
-    
+
     /**
      * Asks for number of developers
      */
@@ -322,12 +323,12 @@ public class TaskPanel extends JPanel
                 "Team Size",
                 JOptionPane.PLAIN_MESSAGE
             );
-            
+
             if (input == null)
             {
                 return -1;
             }
-            
+
             try
             {
                 int count = Integer.parseInt(input.trim());
@@ -335,24 +336,24 @@ public class TaskPanel extends JPanel
                 {
                     return count;
                 }
-                showMessage("Please enter a number between 1 and 5.", 
+                showMessage("Please enter a number between 1 and 5.",
                            "Invalid Input", JOptionPane.WARNING_MESSAGE);
             }
             catch (NumberFormatException e)
             {
-                showMessage("Please enter a valid number.", 
+                showMessage("Please enter a valid number.",
                            "Invalid Input", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
-    
+
     /**
      * Collects developer names
      */
     private List<String> askDeveloperNames(int count)
     {
         List<String> developers = new ArrayList<>();
-        
+
         for (int i = 1; i <= count; i++)
         {
             String name = JOptionPane.showInputDialog(
@@ -361,26 +362,26 @@ public class TaskPanel extends JPanel
                 "Team Member",
                 JOptionPane.PLAIN_MESSAGE
             );
-            
+
             if (name == null)
             {
                 return null;
             }
-            
+
             name = name.trim();
             if (name.isEmpty())
             {
-                showMessage("Developer name cannot be empty.", 
+                showMessage("Developer name cannot be empty.",
                            "Invalid Input", JOptionPane.WARNING_MESSAGE);
                 return null;
             }
-            
+
             developers.add(name);
         }
-        
+
         return developers;
     }
-    
+
     /**
      * Asks for task duration
      */
@@ -394,12 +395,12 @@ public class TaskPanel extends JPanel
                 "Task Duration",
                 JOptionPane.PLAIN_MESSAGE
             );
-            
+
             if (input == null)
             {
                 return -1;
             }
-            
+
             try
             {
                 float duration = Float.parseFloat(input.trim());
@@ -407,17 +408,17 @@ public class TaskPanel extends JPanel
                 {
                     return duration;
                 }
-                showMessage("Duration must be greater than 0.", 
+                showMessage("Duration must be greater than 0.",
                            "Invalid Input", JOptionPane.WARNING_MESSAGE);
             }
             catch (NumberFormatException e)
             {
-                showMessage("Please enter a valid number.", 
+                showMessage("Please enter a valid number.",
                            "Invalid Input", JOptionPane.WARNING_MESSAGE);
             }
         }
     }
-    
+
     /**
      * Asks for task status
      */
@@ -434,7 +435,7 @@ public class TaskPanel extends JPanel
             options[0]
         );
     }
-    
+
     /**
      * Displays all tasks
      */
@@ -450,7 +451,7 @@ public class TaskPanel extends JPanel
             taskDisplayArea.setText(content);
         }
     }
-    
+
     /**
      * Shows search dialog
      */
@@ -462,7 +463,7 @@ public class TaskPanel extends JPanel
             "Search Tasks",
             JOptionPane.QUESTION_MESSAGE
         );
-        
+
         if (developer != null && !developer.trim().isEmpty())
         {
             try
@@ -472,12 +473,12 @@ public class TaskPanel extends JPanel
             }
             catch (IllegalArgumentException e)
             {
-                showMessage("No tasks found for developer: " + developer, 
+                showMessage("No tasks found for developer: " + developer,
                            "Search Results", JOptionPane.INFORMATION_MESSAGE);
             }
         }
     }
-    
+
     /**
      * Shows the longest task
      */
@@ -490,11 +491,11 @@ public class TaskPanel extends JPanel
         }
         catch (IllegalStateException e)
         {
-            showMessage("No tasks available.", 
+            showMessage("No tasks available.",
                        "Cannot Determine", JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
+
     /**
      * Shows a message dialog
      */
