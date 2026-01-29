@@ -171,6 +171,18 @@ kanban-java/
 │           ├── LoginPanel.java
 │           ├── RegistrationPanel.java
 │           └── TaskPanel.java
+├── test/
+│   └── Solution/
+│       ├── Logic/
+│       │   ├── AuthManagerTest.java
+│       │   ├── TaskManagerTest.java
+│       │   └── ValidatorTest.java
+│       └── UI/
+│           └── RoundedButtonTest.java
+├── lib/
+│   ├── junit-4.13.2.jar
+│   └── hamcrest-core-1.3.jar
+├── build.xml
 └── README.md
 ```
 
