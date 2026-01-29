@@ -6,8 +6,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application window with optimized window sizes
- * Registration panel opens in full screen mode
+ * Main application window with consistent sizing
+ * All panels now use the standard 900x600 window size
  */
 public final class AuthFrame extends JFrame
 {
@@ -32,7 +32,7 @@ public final class AuthFrame extends JFrame
     {
         setTitle("Task Manager");
         
-        // Set default size for login and task panels
+        // Set consistent size for all panels
         setSize(900, 600);
         setMinimumSize(new Dimension(800, 533));
         
@@ -62,7 +62,7 @@ public final class AuthFrame extends JFrame
      */
     public void showLoginPanel()
     {
-        // Reset to windowed mode
+        // Ensure windowed mode
         setExtendedState(JFrame.NORMAL);
         setSize(900, 600);
         setLocationRelativeTo(null);
@@ -74,12 +74,14 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Shows the registration panel in full screen mode
+     * Shows the registration panel
      */
     public void showRegistrationPanel()
     {
-        // Set to full screen mode
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        // Use consistent window size (not full screen)
+        setExtendedState(JFrame.NORMAL);
+        setSize(900, 600);
+        setLocationRelativeTo(null);
         
         getContentPane().removeAll();
         add(new RegistrationPanel(this, authManager));
