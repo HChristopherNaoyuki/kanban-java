@@ -5,8 +5,8 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Authentication interface following progressive disclosure principles
- * Clear structure with focused content layout
+ * Clean, minimal login interface following Apple design guidelines
+ * Provides clear navigation and intuitive user experience
  */
 public class LoginPanel extends JPanel
 {
@@ -15,79 +15,81 @@ public class LoginPanel extends JPanel
     private JTextField usernameField;
     private JPasswordField passwordField;
     
+    /**
+     * Constructs the login panel with authentication components
+     */
     public LoginPanel(AuthFrame frame, AuthManager authManager)
     {
         this.frame = frame;
         this.authManager = authManager;
         
-        setLayout(new GridBagLayout());
+        setLayout(new BorderLayout());
         setBackground(UIManager.getColor("Panel.background"));
         
-        // Main content container with proper spacing
+        // Create centered content panel
         JPanel contentPanel = createContentPanel();
-        add(contentPanel);
+        add(contentPanel, BorderLayout.CENTER);
     }
     
     /**
-     * Creates main content panel with structured layout
-     * Implements visual hierarchy and clear action paths
+     * Creates the main content panel with all UI components
      */
     private JPanel createContentPanel()
     {
         JPanel panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setBackground(UIManager.getColor("Panel.background"));
-        panel.setBorder(BorderFactory.createEmptyBorder(48, 64, 48, 64));
-        panel.setMaximumSize(new Dimension(400, 600));
+        panel.setBorder(BorderFactory.createEmptyBorder(40, 50, 40, 50));
         
-        // Application title
+        // Add application title
         panel.add(createTitleLabel());
-        panel.add(Box.createVerticalStrut(48));
+        panel.add(Box.createVerticalStrut(40));
         
-        // Form fields with clear labels
+        // Add form fields
         panel.add(createFormSection());
-        panel.add(Box.createVerticalStrut(32));
+        panel.add(Box.createVerticalStrut(30));
         
-        // Primary action button
+        // Add primary action button
         panel.add(createSignInButton());
-        panel.add(Box.createVerticalStrut(24));
+        panel.add(Box.createVerticalStrut(20));
         
-        // Secondary navigation option
+        // Add registration link
         panel.add(createRegistrationLink());
         
         return panel;
     }
     
     /**
-     * Creates application title with visual hierarchy
+     * Creates the application title label
      */
     private JLabel createTitleLabel()
     {
         JLabel label = new JLabel("Task Manager", SwingConstants.CENTER);
-        label.setFont(new Font("SF Pro Display", Font.BOLD, 28));
-        label.setForeground(UIManager.getColor("Label.foreground"));
-        label.setAlignmentX(CENTER_ALIGNMENT);
+        label.setFont(new Font("Helvetica Neue", Font.BOLD, 28));
+        label.setForeground(new Color(28, 28, 28));
+        label.setAlignmentX(Component.CENTER_ALIGNMENT);
+        label.setBorder(BorderFactory.createEmptyBorder(0, 0, 10, 0));
         return label;
     }
     
     /**
-     * Creates structured form section with input fields
+     * Creates the form section with username and password fields
      */
     private JPanel createFormSection()
     {
         JPanel formPanel = new JPanel();
         formPanel.setLayout(new BoxLayout(formPanel, BoxLayout.Y_AXIS));
         formPanel.setBackground(UIManager.getColor("Panel.background"));
-        formPanel.setAlignmentX(CENTER_ALIGNMENT);
+        formPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        // Username field with label
+        // Username field
         formPanel.add(createFieldLabel("Username"));
         formPanel.add(Box.createVerticalStrut(8));
         usernameField = createTextField();
         formPanel.add(usernameField);
-        formPanel.add(Box.createVerticalStrut(24));
+        formPanel.add(Box.createVerticalStrut(20));
         
-        // Password field with label
+        // Password field
         formPanel.add(createFieldLabel("Password"));
         formPanel.add(Box.createVerticalStrut(8));
         passwordField = createPasswordField();
@@ -97,70 +99,70 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Creates consistent field labels with typographic hierarchy
+     * Creates a form field label with consistent styling
      */
     private JLabel createFieldLabel(String text)
     {
         JLabel label = new JLabel(text);
-        label.setFont(new Font("SF Pro Text", Font.PLAIN, 14));
-        label.setForeground(UIManager.getColor("Label.foreground"));
-        label.setAlignmentX(LEFT_ALIGNMENT);
+        label.setFont(new Font("Helvetica Neue", Font.PLAIN, 14));
+        label.setForeground(new Color(80, 80, 80));
+        label.setAlignmentX(Component.LEFT_ALIGNMENT);
         return label;
     }
     
     /**
-     * Creates standardized text input field
+     * Creates a styled text field for user input
      */
     private JTextField createTextField()
     {
-        JTextField field = new JTextField(24);
-        field.setFont(new Font("SF Pro Text", Font.PLAIN, 16));
-        field.setMaximumSize(new Dimension(300, 40));
+        JTextField field = new JTextField();
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 16));
+        field.setMaximumSize(new Dimension(320, 40));
         field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, 
-                UIManager.getColor("TextField.shadow")),
-            BorderFactory.createEmptyBorder(8, 8, 8, 8)
+            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
         ));
+        field.setBackground(Color.WHITE);
         return field;
     }
     
     /**
-     * Creates secure password input field
+     * Creates a styled password field for secure input
      */
     private JPasswordField createPasswordField()
     {
-        JPasswordField field = new JPasswordField(24);
-        field.setFont(new Font("SF Pro Text", Font.PLAIN, 16));
-        field.setMaximumSize(new Dimension(300, 40));
+        JPasswordField field = new JPasswordField();
+        field.setFont(new Font("Helvetica Neue", Font.PLAIN, 16));
+        field.setMaximumSize(new Dimension(320, 40));
         field.setBorder(BorderFactory.createCompoundBorder(
-            BorderFactory.createMatteBorder(0, 0, 1, 0, 
-                UIManager.getColor("TextField.shadow")),
-            BorderFactory.createEmptyBorder(8, 8, 8, 8)
+            BorderFactory.createLineBorder(new Color(200, 200, 200), 1),
+            BorderFactory.createEmptyBorder(8, 10, 8, 10)
         ));
+        field.setBackground(Color.WHITE);
         return field;
     }
     
     /**
-     * Creates primary action button with visual emphasis
+     * Creates the primary sign-in button
      */
     private JButton createSignInButton()
     {
         JButton button = new JButton("Sign In");
-        button.setFont(new Font("SF Pro Text", Font.BOLD, 15));
+        button.setFont(new Font("Helvetica Neue", Font.BOLD, 15));
         button.setForeground(Color.WHITE);
-        button.setBackground(new Color(0, 122, 255)); // System blue
+        button.setBackground(new Color(0, 122, 255));
         button.setFocusPainted(false);
-        button.setBorder(BorderFactory.createEmptyBorder(12, 32, 12, 32));
-        button.setAlignmentX(CENTER_ALIGNMENT);
+        button.setBorder(BorderFactory.createEmptyBorder(12, 40, 12, 40));
+        button.setAlignmentX(Component.CENTER_ALIGNMENT);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
         
-        // Add hover effect for better interaction feedback
+        // Add hover effect
         button.addMouseListener(new java.awt.event.MouseAdapter()
         {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt)
             {
-                button.setBackground(new Color(0, 110, 235));
+                button.setBackground(new Color(0, 100, 230));
             }
             
             @Override
@@ -176,20 +178,19 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Creates secondary navigation link with clear affordance
+     * Creates the registration navigation link
      */
     private JPanel createRegistrationLink()
     {
         JPanel linkPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 4, 0));
         linkPanel.setBackground(UIManager.getColor("Panel.background"));
-        linkPanel.setAlignmentX(CENTER_ALIGNMENT);
+        linkPanel.setAlignmentX(Component.CENTER_ALIGNMENT);
         
-        JLabel promptLabel = new JLabel("New to Task Manager?");
-        promptLabel.setFont(new Font("SF Pro Text", Font.PLAIN, 13));
-        promptLabel.setForeground(UIManager.getColor("Label.disabledForeground"));
+        JLabel promptLabel = new JLabel("Don't have an account?");
+        promptLabel.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
+        promptLabel.setForeground(new Color(120, 120, 120));
         
-        JButton registerButton = new JButton("Create Account");
-        styleLinkButton(registerButton);
+        JButton registerButton = createLinkButton("Create Account");
         registerButton.addActionListener(e -> frame.showRegistrationPanel());
         
         linkPanel.add(promptLabel);
@@ -199,30 +200,32 @@ public class LoginPanel extends JPanel
     }
     
     /**
-     * Styles link buttons for clear navigation affordance
+     * Creates a styled link button
      */
-    private void styleLinkButton(JButton button)
+    private JButton createLinkButton(String text)
     {
-        button.setFont(new Font("SF Pro Text", Font.PLAIN, 13));
+        JButton button = new JButton(text);
+        button.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
         button.setForeground(new Color(0, 122, 255));
-        button.setBorder(BorderFactory.createEmptyBorder(2, 4, 2, 4));
+        button.setBorder(BorderFactory.createEmptyBorder(2, 6, 2, 6));
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         button.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
+        return button;
     }
     
     /**
-     * Handles login attempt with user feedback
+     * Attempts user login with validation
      */
     private void attemptLogin()
     {
         String username = usernameField.getText().trim();
         String password = new String(passwordField.getPassword()).trim();
         
-        // Validate required fields
+        // Validate input fields
         if (username.isEmpty() || password.isEmpty())
         {
-            showMessage("Please enter both username and password", 
+            showMessage("Please enter both username and password.", 
                        "Required Fields", JOptionPane.WARNING_MESSAGE);
             return;
         }
@@ -237,16 +240,21 @@ public class LoginPanel extends JPanel
         }
         catch (IllegalArgumentException ex)
         {
-            showMessage("The username or password is incorrect", 
-                       "Unable to Sign In", JOptionPane.ERROR_MESSAGE);
+            showMessage("Invalid username or password. Please try again.", 
+                       "Login Failed", JOptionPane.ERROR_MESSAGE);
         }
     }
     
     /**
-     * Shows user feedback messages with consistent styling
+     * Displays a message dialog to the user
      */
     private void showMessage(String message, String title, int messageType)
     {
-        JOptionPane.showMessageDialog(this, message, title, messageType);
+        JOptionPane.showMessageDialog(
+            this, 
+            message, 
+            title, 
+            messageType
+        );
     }
 }

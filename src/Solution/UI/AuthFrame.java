@@ -6,14 +6,17 @@ import javax.swing.*;
 import java.awt.*;
 
 /**
- * Main application window implementing Apple's Human Interface Guidelines
- * Provides consistent navigation foundation and visual structure
+ * Main application window with Apple-inspired design
+ * Manages navigation between authentication and task management panels
  */
 public final class AuthFrame extends JFrame
 {
     private final AuthManager authManager;
     private final TaskManager taskManager;
     
+    /**
+     * Constructs the main application window
+     */
     public AuthFrame()
     {
         this.authManager = new AuthManager();
@@ -23,33 +26,36 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Initializes window with Apple-like design principles
-     * Emphasizes clarity, consistency, and visual hierarchy
+     * Initializes window properties with Apple design principles
      */
     private void initializeWindow()
     {
         setTitle("Task Manager");
-        setSize(520, 600);
-        setMinimumSize(new Dimension(480, 520));
+        setSize(500, 550);
+        setMinimumSize(new Dimension(480, 500));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
-        // System background color for consistent appearance
+        // Use system colors for consistent appearance across platforms
         getContentPane().setBackground(UIManager.getColor("Panel.background"));
         
-        // Use system look and feel for native appearance
+        // Set system look and feel for native appearance
         try
         {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         }
         catch (Exception e)
         {
-            // Fallback to default look and feel
+            // Use default look and feel if system L&F fails
+            System.err.println("Unable to set system look and feel: " + e.getMessage());
         }
+        
+        // Center window on screen
+        setLocationRelativeTo(null);
     }
     
     /**
-     * Shows login panel - entry point for user authentication
+     * Displays the login panel for user authentication
      */
     public void showLoginPanel()
     {
@@ -60,7 +66,7 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Shows registration panel for new account creation
+     * Displays the registration panel for new account creation
      */
     public void showRegistrationPanel()
     {
@@ -71,8 +77,7 @@ public final class AuthFrame extends JFrame
     }
     
     /**
-     * Shows main task management interface
-     * Core workspace for task operations
+     * Displays the main task management panel
      */
     public void showTaskPanel()
     {
