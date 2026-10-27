@@ -297,6 +297,6 @@ regarding your intended use case.
 
 ---
 
-End of Document
+END OF DOCUMENT
 
 ---
